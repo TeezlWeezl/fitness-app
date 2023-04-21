@@ -1,10 +1,11 @@
 import { useState } from "react";
 import logo from "../icon/logo.svg";
 import "./App.style.css";
+import { useCharacters } from "../hooks/useCharacters";
+import { CharacterOverview } from "../CharacterOverview/";
 
 function App() {
   const [count, setCount] = useState(0);
-
   return (
     <div className="App">
       <header className="App-header bg-[--primary-color]">
@@ -41,6 +42,7 @@ function App() {
           </a>
         </p>
       </header>
+      <CharacterOverview />
     </div>
   );
 }
