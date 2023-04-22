@@ -1,3 +1,4 @@
+import { ActionCard } from "../ActionCard";
 import "./Dashboard.style.css";
 
 export function Dashboard() {
@@ -8,7 +9,8 @@ export function Dashboard() {
         <div className="flex justify-between items-center my-10">
           <h2 className="headline-2">Dein Workout heute</h2>
           <p className="stext">Trainingsplan</p>
-        </div>
+          </div>
+          <ActionCard type="dashboard"/>
     </div>
   );
 }
