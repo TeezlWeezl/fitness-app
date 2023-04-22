@@ -10,7 +10,7 @@ function App() {
     <div className="App">
       <header className="App-header bg-[--primary-color]">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+        <h1 className="text-3xl font-bold underline font-poppins">Hello world!</h1>
         <p>
           <button
             type="button"

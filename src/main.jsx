@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { App } from "./App";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { Dashboard } from "./Dashboard/";
 
 const root = createRoot(document.getElementById("root"));
 
@@ -14,7 +15,7 @@ const client = new ApolloClient({
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Dashboard />
     </ApolloProvider>
   </React.StrictMode>
 );
