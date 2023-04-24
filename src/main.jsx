@@ -6,7 +6,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { Dashboard } from "./Dashboard/";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorPage } from "./ErrorPage";
-import {ProgramBrowser} from "./ProgramBrowser";
+import { ProgramBrowser } from "./ProgramBrowser";
+import { UserProfile } from "./UserProfile";
 
 const client = new ApolloClient({
   uri: "https://rickandmortyapi.com/graphql",
@@ -17,11 +18,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Dashboard />,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
+    children: [
+    ],
   },
   {
     path: "programs",
     element: <ProgramBrowser />,
+  },
+  {
+    path: "profile",
+    element: <UserProfile />,
   },
 ]);
 

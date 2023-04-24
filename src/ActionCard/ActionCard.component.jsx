@@ -11,7 +11,7 @@ export function ActionCard(props) {
     return (
       <div
         className={
-          "mt-5 flex min-h-[214px] flex-col items-center justify-center rounded-[30px] bg-app-medium p-7 first-of-type:mt-12 " +
+          "mt-5 flex min-h-[214px] flex-col items-center justify-center rounded-[30px] p-7 first-of-type:mt-12 " +
           props.color
         }
       >
@@ -19,6 +19,12 @@ export function ActionCard(props) {
       </div>
     );
   } else {
-    throw Error("Card type not specified.");
+    return (
+      <div
+        className={`mt-5 flex min-h-[${props.height}] flex-col items-center justify-center rounded-[30px] bg-app-medium first-of-type:mt-12 ${props.color} ${props.style}`}
+      >
+        {props.children}
+      </div>
+    );
   }
 }
