@@ -1,1 +1,1 @@
-export * from './CharacterOverview.comonent'
+export * from './CharacterOverview.component'
