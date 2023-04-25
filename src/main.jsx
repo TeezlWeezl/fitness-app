@@ -10,7 +10,7 @@ import { ProgramBrowser } from "./ProgramBrowser";
 import { UserProfile } from "./UserProfile";
 
 const client = new ApolloClient({
-  uri: "https://rickandmortyapi.com/graphql",
+  uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clgw946601iky01uig6lia0tz/master",
   cache: new InMemoryCache(),
 });
 

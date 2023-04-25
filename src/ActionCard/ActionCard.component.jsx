@@ -15,7 +15,7 @@ export function ActionCard(props) {
           props.color
         }
       >
-        <h2 className="headline-2">Titel des Programms</h2>
+        <h2 className="headline-2">{props.children}</h2>
       </div>
     );
   } else {
