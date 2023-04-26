@@ -14,9 +14,9 @@ export function Navbar(props) {
           </Link>
         </li>
         <li>
-          <Link to={`program`}>
+          <Link to={`programs`}>
             <img
-              className={props.nav !== "program" ? "navicon-disabled" : ""}
+              className={props.nav !== "programs" ? "navicon-disabled" : ""}
               src="../icon/Navbar__program.svg"
             ></img>
           </Link>

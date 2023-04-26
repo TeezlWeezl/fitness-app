@@ -20,6 +20,15 @@
   .mtext {
     @apply text-base font-normal font-poppins text-app-light
   }
+  .gradient-1 {
+    background: linear-gradient(135deg, #FFD162, #FF99C3);
+  }
+  .gradient-2 {
+    background: linear-gradient(135deg, #3EF3E8, #F5FFA0);
+  }
+  .gradient-3 {
+    background: linear-gradient(135deg, #3EF3E8, #3EE4E8, #3B85E6, #3A4AE4);
+  }
 }
 
 body {
