@@ -1,6 +1,10 @@
 import { NavLink } from "react-router-dom";
 import "./Navbar.style.css";
 
+import homeIcon from '../icon/Navbar__home.svg'
+import programIcon from '../icon/Navbar__program.svg'
+import profileIcon from '../icon/Navbar__profile.svg'
+
 export function Navbar(props) {
   return (
     <nav className=" fixed bottom-0 left-0  min-w-full rounded-t-[20px] bg-black/40 px-10 py-[14px]">
@@ -9,7 +13,7 @@ export function Navbar(props) {
           <NavLink to={`/`}>
             <img
               className={props.nav !== "home" ? "navicon-disabled" : ""}
-              src="../icon/Navbar__home.svg"
+              src={homeIcon}
             ></img>
           </NavLink>
         </li>
@@ -17,7 +21,7 @@ export function Navbar(props) {
           <NavLink to={`/programs`}>
             <img
               className={props.nav !== "programs" ? "navicon-disabled" : ""}
-              src="../icon/Navbar__program.svg"
+              src={programIcon}
             ></img>
           </NavLink>
         </li>
@@ -25,7 +29,7 @@ export function Navbar(props) {
           <NavLink to={`/profile`}>
             <img
               className={props.nav !== "profile" ? "navicon-disabled" : ""}
-              src="../icon/Navbar__profile.svg"
+              src={profileIcon}
             ></img>
           </NavLink>
         </li>
