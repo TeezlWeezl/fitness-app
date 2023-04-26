@@ -11,7 +11,7 @@ export function Dashboard() {
         <h2 className="headline-2">Dein Workout heute</h2>
         <p className="stext">Trainingsplan</p>
       </div>
-      <ActionCard type="dashboard" />
+      <ActionCard type="dashboard" height="214px" />
 
       <Navbar nav="home" />
     </div>
