@@ -6,7 +6,7 @@ const UserProfile = () => {
     <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
       <h2 className="headline-2">Name</h2>
       <div className=" mt-[85px] flex flex-col items-center justify-center gap-3">
-        <div className="gradient-3 min-h-[120px] min-w-[120px] rounded-full"></div>
+        <div className="blueGradient min-h-[120px] min-w-[120px] rounded-full"></div>
         <p className="mtext">Profil bearbeiten</p>
       </div>
       <p className="mtext mt-9">Aktueller Trainingsplan</p>
