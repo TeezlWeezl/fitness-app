@@ -6,7 +6,7 @@ import workoutImg from "../img/dashboard__workout.svg"
 
 export function Dashboard() {
   return (
-    <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
+    <div className="app-default">
       <h1 className="headline-1">Hi Name!</h1>
       <img src={workoutImg} className="m-auto my-6"></img>
       <div className="my-10 flex items-center justify-between">

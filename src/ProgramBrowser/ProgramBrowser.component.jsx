@@ -8,7 +8,7 @@ function ProgramBrowser() {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
+      <div className="app-default">
         <h2 className="headline-2">Browse</h2>
         <p className="mtext">Loading...</p>
 
@@ -18,7 +18,7 @@ function ProgramBrowser() {
 
   if (error)
     return (
-      <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
+      <div className="app-default">
         <h2 className="headline-2">Browse</h2>
         <p className="mtext">Es ist ein Fehler aufgetreten</p>
         <p className="stext">{error}</p>
@@ -28,7 +28,7 @@ function ProgramBrowser() {
     );
   if (data)
     return (
-      <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
+      <div className="app-default">
         <h2 className="headline-2">Browse</h2>
         {data.programs?.map(({ id, name, color }, index) => {
           return (

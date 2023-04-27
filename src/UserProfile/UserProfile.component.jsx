@@ -3,7 +3,7 @@ import { Navbar } from "../Navbar";
 
 const UserProfile = () => {
   return (
-    <div className="min-h-screen bg-app-dark px-4 py-10 pb-16">
+    <div className="app-default">
       <h2 className="headline-2">Name</h2>
       <div className=" mt-[85px] flex flex-col items-center justify-center gap-3">
         <div className="blueGradient min-h-[120px] min-w-[120px] rounded-full"></div>
