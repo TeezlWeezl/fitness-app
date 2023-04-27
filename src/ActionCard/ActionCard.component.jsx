@@ -11,7 +11,7 @@ export function ActionCard(props) {
     return (
       <div
         className={
-          "flex min-h-[214px] flex-col items-center justify-center rounded-[30px] p-7 " +
+          "flex min-h-[214px] flex-col items-center justify-center rounded-[30px] p-7 text-center " +
           props.color
         }
       >
