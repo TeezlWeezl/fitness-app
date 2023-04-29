@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     element: <ProgramBrowser />,
   },
   {
-    path: "programs/:programmid",
+    path: "programs/:programId",
     element: <Program />,
   },
   {

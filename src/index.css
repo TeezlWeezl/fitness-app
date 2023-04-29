@@ -49,7 +49,7 @@ code {
 }
 
 .greenGradient {
-  background: linear-gradient(135deg, #3EF3E8, #F5FFA0);
+  background: linear-gradient(135deg, #F5FFA0, #3EF3E8);
 }
 
 .blueGradient {

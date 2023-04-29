@@ -26,6 +26,7 @@ function ProgramBrowser() {
         <Navbar nav="programs" />
       </div>
     );
+    
   if (data)
     return (
       <div className="app-default">
