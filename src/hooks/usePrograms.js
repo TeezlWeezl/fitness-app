@@ -20,6 +20,10 @@ const GET_PROGRAM = gql`
       difficulty
       duration
       color
+      workouts {
+        id
+        name
+      }
     }
   }
 `;
