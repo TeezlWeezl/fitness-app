@@ -5,8 +5,9 @@ import { useProgram } from "../hooks/usePrograms";
 import { useEffect, useState } from "react";
 
 function Program(props) {
+  const [first, setFirst] = useState(3)
   const { programId } = useParams();
-  const { error, data, loading } = useProgram(programId);
+  const { error, data, loading } = useProgram(programId, first);
 
   if (loading)
     return (
@@ -33,7 +34,6 @@ function Program(props) {
       color,
       programWorkoutSchedule,
     } = data.program;
-    console.log(programWorkoutSchedule);
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
         <div
@@ -75,16 +75,26 @@ function Program(props) {
         <div className="my-7 px-6">
           <h3 className="headline-3">So ist das Programm aufgeteilt:</h3>
         </div>
-        <div className="mt-7 flex justify-between px-6">
-          <h3 className="headline-3">{programWorkoutSchedule.length} Tage</h3>
-          <p className="stext">Alle anzeigen</p>
+        <div className="mt-7 flex items-center justify-between px-6">
+          <h3 id="workoutSchedule" className="headline-3">{programWorkoutSchedule.length} Tage</h3>
+          <Link
+            className="stext"
+            onClick={() => {
+              setFirst((prev) => 9999)
+              const view = document.getElementById("workoutSchedule")
+              view.scrollIntoView()
+              console.log('Success');
+            }}
+          >
+            Alle anzeigen
+          </Link>
         </div>
         {programWorkoutSchedule.map(
           ({
             id,
             dayDue,
             completed,
-            workout: { id: workoutId, category, workoutColor, duration, name},
+            workout: { id: workoutId, category, workoutColor, duration, name },
           }) => (
             <Link key={id} to={`${workoutId}`}>
               <WorkoutCard
