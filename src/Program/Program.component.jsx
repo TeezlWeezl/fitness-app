@@ -83,7 +83,8 @@ function Program(props) {
           ({
             id,
             dayDue,
-            workout: { id: workoutId, category, workoutColor, duration, name },
+            completed,
+            workout: { id: workoutId, category, workoutColor, duration, name},
           }) => (
             <Link key={id} to={`${workoutId}`}>
               <WorkoutCard
@@ -91,6 +92,7 @@ function Program(props) {
                 category={category}
                 duration={duration}
                 dayDue={dayDue}
+                completed={completed}
               >
                 {name}
               </WorkoutCard>

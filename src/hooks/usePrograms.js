@@ -22,6 +22,7 @@ const GET_PROGRAM = gql`
       programWorkoutSchedule(orderBy: dayDue_ASC) {
         id
         dayDue
+        completed
         workout {
           id
           name
