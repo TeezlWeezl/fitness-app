@@ -8,26 +8,25 @@
   .headline-1 {
     @apply text-4xl font-bold text-app-light font-poppins
   }
+
   .headline-2 {
     @apply text-2xl font-bold text-app-light font-poppins
   }
+
   .headline-3 {
     @apply text-lg font-bold text-app-light font-poppins
   }
+
   .stext {
     @apply text-xs font-normal font-poppins text-app-light
   }
+
   .mtext {
     @apply text-base font-normal font-poppins text-app-light
   }
-  .gradient-1 {
-    background: linear-gradient(135deg, #FFD162, #FF99C3);
-  }
-  .gradient-2 {
-    background: linear-gradient(135deg, #3EF3E8, #F5FFA0);
-  }
-  .gradient-3 {
-    background: linear-gradient(135deg, #3EF3E8, #3EE4E8, #3B85E6, #3A4AE4);
+
+  .app-default {
+    @apply min-h-screen bg-app-dark px-4 py-10 pb-16
   }
 }
 
@@ -43,4 +42,16 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.redGradient {
+  background: linear-gradient(135deg, #FFD162, #FF99C3);
+}
+
+.greenGradient {
+  background: linear-gradient(135deg, #F5FFA0, #3EF3E8);
+}
+
+.blueGradient {
+  background: linear-gradient(135deg, #3EF3E8, #3EE4E8, #3B85E6, #3A4AE4);
 }

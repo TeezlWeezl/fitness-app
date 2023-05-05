@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ErrorPage } from "./ErrorPage";
 import { ProgramBrowser } from "./ProgramBrowser";
 import { UserProfile } from "./UserProfile";
+import { Program } from "./Program";
 
 const client = new ApolloClient({
   uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clgw946601iky01uig6lia0tz/master",
@@ -19,12 +20,19 @@ const router = createBrowserRouter([
     path: "/",
     element: <Dashboard />,
     errorElement: <ErrorPage />,
-    children: [
-    ],
+    children: [],
   },
   {
     path: "programs",
     element: <ProgramBrowser />,
+  },
+  {
+    path: "programs/:programId",
+    element: <Program />,
+  },
+  {
+    path: "programs/:programId/:workoutId",
+    element: <div>Hello World</div>
   },
   {
     path: "profile",
