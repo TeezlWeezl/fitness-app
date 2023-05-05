@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ActionButton } from "../ActionButton";
 import { WorkoutCard } from "../WorkoutCard";
 import { useProgram } from "../hooks/usePrograms";
@@ -24,9 +24,16 @@ function Program(props) {
     );
 
   if (data) {
-    const { id, name, description, focus, difficulty, duration, color, workouts } =
-      data.program;
-      console.log(workouts);
+    const {
+      name,
+      description,
+      focus,
+      difficulty,
+      duration,
+      color,
+      programWorkoutSchedule,
+    } = data.program;
+    console.log(programWorkoutSchedule);
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
         <div
@@ -69,12 +76,27 @@ function Program(props) {
           <h3 className="headline-3">So ist das Programm aufgeteilt:</h3>
         </div>
         <div className="mt-7 flex justify-between px-6">
-          <h3 className="headline-3">21 Tage</h3>
+          <h3 className="headline-3">{programWorkoutSchedule.length} Tage</h3>
           <p className="stext">Alle anzeigen</p>
         </div>
-        <WorkoutCard color="redGradient">Tag 1</WorkoutCard>
-        <WorkoutCard color="greenGradient">Tag 2</WorkoutCard>
-        <WorkoutCard color="blueGradient">Tag 3</WorkoutCard>
+        {programWorkoutSchedule.map(
+          ({
+            id,
+            dayDue,
+            workout: { id: workoutId, category, workoutColor, duration, name },
+          }) => (
+            <Link key={id} to={`${workoutId}`}>
+              <WorkoutCard
+                color={workoutColor}
+                category={category}
+                duration={duration}
+                dayDue={dayDue}
+              >
+                {name}
+              </WorkoutCard>
+            </Link>
+          )
+        )}
 
         <ActionButton color={color} size="145px">
           jetzt starten

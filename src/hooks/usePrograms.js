@@ -13,16 +13,22 @@ const GET_PROGRAMS = gql`
 const GET_PROGRAM = gql`
   query ProgramByID($id: ID!) {
     program(where: { id: $id }) {
-      id
       name
       description
       focus
       difficulty
       duration
       color
-      workouts {
+      programWorkoutSchedule(orderBy: dayDue_ASC) {
         id
-        name
+        dayDue
+        workout {
+          id
+          name
+          category
+          workoutColor
+          duration
+        }
       }
     }
   }

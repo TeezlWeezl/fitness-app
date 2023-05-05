@@ -31,6 +31,10 @@ const router = createBrowserRouter([
     element: <Program />,
   },
   {
+    path: "programs/:programId/:workoutId",
+    element: <div>Hello World</div>
+  },
+  {
     path: "profile",
     element: <UserProfile />,
   },
