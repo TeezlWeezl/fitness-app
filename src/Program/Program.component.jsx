@@ -4,8 +4,10 @@ import { WorkoutCard } from "../WorkoutCard";
 import { useProgram } from "../hooks/usePrograms";
 import { useEffect, useState } from "react";
 
+import close from "../icon/close.svg";
+
 function Program(props) {
-  const [first, setFirst] = useState(3)
+  const [first, setFirst] = useState(3);
   const { programId } = useParams();
   const { error, data, loading } = useProgram(programId, first);
 
@@ -36,6 +38,9 @@ function Program(props) {
     } = data.program;
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
+        <Link to="/programs">
+          <img className="absolute right-5 top-5 z-10" src={close}></img>
+        </Link>
         <div
           className={`relative flex min-h-[75vh] flex-col justify-center ${color}`}
         >
@@ -76,14 +81,16 @@ function Program(props) {
           <h3 className="headline-3">So ist das Programm aufgeteilt:</h3>
         </div>
         <div className="mt-7 flex items-center justify-between px-6">
-          <h3 id="workoutSchedule" className="headline-3">{programWorkoutSchedule.length} Tage</h3>
+          <h3 id="workoutSchedule" className="headline-3">
+            {programWorkoutSchedule.length} Tage
+          </h3>
           <Link
             className="stext"
             onClick={() => {
-              setFirst((prev) => 9999)
-              const view = document.getElementById("workoutSchedule")
-              view.scrollIntoView()
-              console.log('Success');
+              setFirst((prev) => 9999);
+              const view = document.getElementById("workoutSchedule");
+              view.scrollIntoView();
+              console.log("Success");
             }}
           >
             Alle anzeigen
