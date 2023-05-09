@@ -103,7 +103,7 @@ function Program(props) {
             completed,
             workout: { id: workoutId, category, workoutColor, duration, name },
           }) => (
-            <Link key={id} to={`${workoutId}`}>
+            <Link key={id} to={`${id}`}>
               <WorkoutCard
                 color={workoutColor}
                 category={category}
