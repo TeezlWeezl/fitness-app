@@ -3,6 +3,7 @@ import back from "../icon/back.svg";
 import { ActionButton } from "../ActionButton";
 import { useProgram } from "../hooks/usePrograms";
 import { useWorkout } from "../hooks/useWorkouts";
+import checkmark from "../icon/checkmark.svg";
 
 function Workout(props) {
   const { programId, workoutId } = useParams();
@@ -32,8 +33,13 @@ function Workout(props) {
 
     if (completed) {
       return (
-        <div>Workout has been completed</div>
-      )
+        <div className="app-default flex flex-col items-center justify-center pt-0">
+          <img className="checked w-16" src={checkmark}></img>
+          <h1 className="headline-2">
+            Du hast dieses Workout erfolgreich beendet!
+          </h1>
+        </div>
+      );
     }
 
     return (

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActionButton } from "../ActionButton";
 import { WorkoutCard } from "../WorkoutCard";
 import { useProgram } from "../hooks/usePrograms";
@@ -10,6 +10,7 @@ function Program(props) {
   const [first, setFirst] = useState(3);
   const { programId } = useParams();
   const { error, data, loading } = useProgram(programId, first);
+  const navigate = useNavigate();
 
   if (loading)
     return (
@@ -84,6 +85,7 @@ function Program(props) {
           <h3 id="workoutSchedule" className="headline-3">
             {programWorkoutSchedule.length} Tage
           </h3>
+          // 6d3039aa-1fea-447b-97e1-de12f39fbecd
           <Link
             className="stext"
             onClick={() => {
@@ -117,7 +119,13 @@ function Program(props) {
           )
         )}
 
-        <ActionButton color={color} size="145px">
+        <ActionButton color={color} size="145px" onClick={() => {
+          programWorkoutSchedule.forEach(({ completed, id }) => {
+            if (!completed) {
+              navigate(id);
+            }
+          })}
+        }>
           jetzt starten
         </ActionButton>
       </div>
