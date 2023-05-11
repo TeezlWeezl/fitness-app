@@ -13,7 +13,25 @@ import { Workout } from "./Workout";
 
 const client = new ApolloClient({
   uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clgw946601iky01uig6lia0tz/master",
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Program: {
+        fields: {
+          programWorkoutSchedule: {
+            // Don't cache separate results based on
+            // any of this field's arguments.
+            keyArgs: false,
+  
+            // Concatenate the incoming list items with
+            // the existing list items.
+            merge(existing = [], incoming) {
+              return [...existing, ...incoming];
+            },
+          }, 
+        }
+      }
+    }
+  }),
 });
 
 const router = createBrowserRouter([

@@ -7,9 +7,17 @@ import { useEffect, useState } from "react";
 import close from "../icon/close.svg";
 
 function Program(props) {
-  const [first, setFirst] = useState(3);
+  const [offset, setOffset] = useState(0);
   const { programId } = useParams();
-  const { error, data, loading } = useProgram(programId, first);
+  const { error, data, loading, fetchMore } = useProgram({
+    id: programId,
+    skip: 0,
+    first: 3,
+    onCompleted: () => {
+      setOffset((prev) => prev + 3);
+    }
+  }
+  );
   const navigate = useNavigate();
 
   if (loading)
@@ -33,10 +41,12 @@ function Program(props) {
       description,
       focus,
       difficulty,
-      duration,
+      durationWeeks,
+      durationDays,
       color,
       programWorkoutSchedule,
     } = data.program;
+
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
         <Link to="/programs">
@@ -71,7 +81,7 @@ function Program(props) {
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="min-h-[25px] min-w-[25px] max-w-[25px] rounded-full bg-app-medium"></div>
-              <p className="stext">{`${duration} Wochen`}</p>
+              <p className="stext">{`${durationWeeks} Wochen`}</p>
             </div>
           </div>
         </div>
@@ -83,20 +93,16 @@ function Program(props) {
         </div>
         <div className="mt-7 flex items-center justify-between px-6">
           <h3 id="workoutSchedule" className="headline-3">
-            {programWorkoutSchedule.length} Tage
+            {durationDays} Tage
           </h3>
-          // 6d3039aa-1fea-447b-97e1-de12f39fbecd
-          <Link
+          <button
             className="stext"
             onClick={() => {
-              setFirst((prev) => 9999);
-              const view = document.getElementById("workoutSchedule");
-              view.scrollIntoView();
-              console.log("Success");
+              fetchMore({ variables: { skip: offset } });
             }}
           >
             Alle anzeigen
-          </Link>
+          </button>
         </div>
         {programWorkoutSchedule.map(
           ({
@@ -119,13 +125,17 @@ function Program(props) {
           )
         )}
 
-        <ActionButton color={color} size="145px" onClick={() => {
-          programWorkoutSchedule.forEach(({ completed, id }) => {
-            if (!completed) {
-              navigate(id);
-            }
-          })}
-        }>
+        <ActionButton
+          color={color}
+          size="145px"
+          onClick={() => {
+            programWorkoutSchedule.forEach(({ completed, id }) => {
+              if (!completed) {
+                navigate(id);
+              }
+            });
+          }}
+        >
           jetzt starten
         </ActionButton>
       </div>

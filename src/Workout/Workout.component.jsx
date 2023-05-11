@@ -32,14 +32,7 @@ function Workout(props) {
     } = data.program.programWorkoutSchedule[0];
 
     if (completed) {
-      return (
-        <div className="app-default flex flex-col items-center justify-center pt-0">
-          <img className="checked w-16" src={checkmark}></img>
-          <h1 className="headline-2">
-            Du hast dieses Workout erfolgreich beendet!
-          </h1>
-        </div>
-      );
+      return (<div>Test</div>);
     }
 
     return (

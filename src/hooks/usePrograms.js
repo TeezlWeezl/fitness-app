@@ -11,15 +11,16 @@ const GET_PROGRAMS = gql`
 `;
 
 const GET_PROGRAM = gql`
-  query ProgramByID($id: ID!, $first: Int!) {
+  query ProgramByID($id: ID!, $first: Int!, $skip: Int!) {
     program(where: { id: $id }) {
       name
       description
       focus
       difficulty
-      duration
+      durationWeeks
+      durationDays
       color
-      programWorkoutSchedule(orderBy: dayDue_ASC, first: $first) {
+      programWorkoutSchedule(orderBy: dayDue_ASC, first: $first, skip: $skip) {
         id
         dayDue
         completed
@@ -45,12 +46,16 @@ export const usePrograms = () => {
   };
 };
 
-export const useProgram = (id, first) => {
-  const { error, data, loading } = useQuery(GET_PROGRAM, { variables: { id, first} });
+export const useProgram = ({ id, first, skip, onCompleted }) => {
+  const { error, data, loading, fetchMore } = useQuery(GET_PROGRAM, {
+    variables: { id, first, skip },
+    onCompleted,
+  });
 
   return {
     error,
     data,
     loading,
+    fetchMore,
   };
 };
