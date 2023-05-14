@@ -13,6 +13,7 @@ const GET_PROGRAMS = gql`
 const GET_PROGRAM = gql`
   query ProgramByID($id: ID!, $first: Int!, $skip: Int!) {
     program(where: { id: $id }) {
+      id
       name
       description
       focus

@@ -129,11 +129,12 @@ function Program(props) {
           color={color}
           size="145px"
           onClick={() => {
-            programWorkoutSchedule.forEach(({ completed, id }) => {
+            for (const { completed, id } of programWorkoutSchedule) {
               if (!completed) {
                 navigate(id);
+                return
               }
-            });
+            }
           }}
         >
           jetzt starten

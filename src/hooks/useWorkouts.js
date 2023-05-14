@@ -19,11 +19,12 @@ const GET_WORKOUT = gql`
 export const useWorkout = (programId, workoutId) => {
   const { error, data, loading } = useQuery(GET_WORKOUT, {
     variables: { programId, workoutId },
+    fetchPolicy: 'no-cache'
   });
 
   return {
     error,
     data,
-    loading,
+    loading
   };
 };
