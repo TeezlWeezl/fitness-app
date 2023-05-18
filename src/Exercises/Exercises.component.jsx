@@ -8,22 +8,27 @@ import {
   ButtonNext,
 } from "pure-react-carousel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useState } from "react";
 
 import closeIcon from "../icon/close.svg";
-import prev from "../icon/Exercises__slider-prev.svg"
-import next from "../icon/Exercises__slider-next.svg"
+import prev from "../icon/Exercises__slider-prev.svg";
+import next from "../icon/Exercises__slider-next.svg";
 import "pure-react-carousel/dist/react-carousel.es.css";
 
 const renderTime = ({ remainingTime }) => {
+  // if (remainingTime === startTime) {
+  //   return <div className="mtext">Klicken zum starten!</div>;
+  // }
+
   if (remainingTime === 0) {
-    return <div className="timer">Done!</div>;
+    return <div className="mtext">Done!</div>;
   }
 
   return (
-    <div className="timer">
-      <div className="">Verbleibend</div>
-      <div className="">{remainingTime}</div>
-      <div className="">Sekunden</div>
+    <div>
+      <div className="mtext">Verbleibend</div>
+      <div className="mtext text-3xl">{remainingTime}</div>
+      <div className="mtext">Sekunden</div>
     </div>
   );
 };
@@ -33,9 +38,11 @@ function Exercises(props) {
   const { programId, workoutId } = useParams();
   // connect the useExercises hook
   const { error, data, loading } = useExercises(programId, workoutId);
+  // add state for start and stopping the timer
+  const [isPlaying, setIsPlaying] = useState(false);
 
   if (loading)
-    <div className="app-default pt-0 text-white">
+    <div className="app-default">
       <p className="mtext">Loading...</p>
     </div>;
 
@@ -51,8 +58,7 @@ function Exercises(props) {
       workout: { exercises },
     } = data.program.programWorkoutSchedule[0];
     return (
-      <div className="">
-        <div className="app-default min-w-full pt-0">
+        <div className="app-default min-w-full p-0">
           <Link to={`/programs/${programId}/${workoutId}`}>
             <img
               src={closeIcon}
@@ -70,33 +76,50 @@ function Exercises(props) {
             naturalSlideWidth={100}
             naturalSlideHeight={100}
             totalSlides={exercises.length}
+            className="translate-y-[-50%] absolute top-[50%] w-full"
           >
             <Slider>
               {exercises.map(({ id, duration, exercise: { name } }, index) => {
-                console.log(name);
                 return (
                   <Slide index={index} key={id}>
-                    <div className="flex flex-col justify-center items-center text-center">
-                      
-                      <h1 className="headline-1 mt-[50%]">{name}</h1>
+                    <div className="flex min-h-full flex-col items-center justify-start gap-8 text-center mt-[90px]">
+                      <button onClick={() => setIsPlaying((prev) => !prev)}>
+                        <CountdownCircleTimer
+                          trailColor="#4D5059"
+                          trailStrokeWidth={18}
+                          strokeWidth={18}
+                          isPlaying={isPlaying}
+                          duration={duration}
+                          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                          colorsTime={[
+                            duration,
+                            (duration * 2) / 3,
+                            (duration * 1) / 3,
+                            0,
+                          ]}
+                          onComplete={() => ({ shouldRepeat: false })}
+                        >
+                          {renderTime}
+                        </CountdownCircleTimer>
+                      </button>
+                      <h1 className="headline-1">{name}</h1>
                     </div>
                   </Slide>
                 );
               })}
             </Slider>
-            <ButtonBack className="absolute top-[50%] translate-y-[-50%]">
-              <div className="min-h-[100px] flex flex-row justify-center">
-              <img src={prev} alt="previous" />
+            <ButtonBack className="w-16 absolute top-[50%] min-h-full translate-y-[-50%]">
+              <div className="flex min-h-[100px] flex-row justify-center">
+                <img src={prev} alt="previous" />
               </div>
             </ButtonBack>
-            <ButtonNext className="absolute top-[50%] right-0 translate-y-[-50%]">
-              <div className="min-h-[100px] flex flex-row justify-center">
-              <img src={next} alt="next" />
+            <ButtonNext className="w-16 absolute top-[50%] min-h-full translate-y-[-50%] right-0">
+              <div className="flex min-h-[100px] flex-row justify-center">
+                <img src={next} alt="next" />
               </div>
             </ButtonNext>
           </CarouselProvider>
         </div>
-      </div>
     );
   }
 }
