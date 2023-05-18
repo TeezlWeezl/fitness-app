@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import back from "../icon/back.svg";
 import { ActionButton } from "../ActionButton";
 import { useProgram } from "../hooks/usePrograms";
@@ -8,6 +8,7 @@ import checkmark from "../icon/checkmark.svg";
 function Workout(props) {
   const { programId, workoutId } = useParams();
   const { data, loading, error } = useWorkout(programId, workoutId);
+  const navigate = useNavigate();
 
   if (loading)
     return (
@@ -60,7 +61,7 @@ function Workout(props) {
           </p>
         </div>
         <div />
-        <ActionButton color="redGradient">los!</ActionButton>
+        <ActionButton color="redGradient" onClick={() => navigate("exercise")}>los!</ActionButton>
       </div>
     );
   }
