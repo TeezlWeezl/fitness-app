@@ -14,7 +14,9 @@ const GET_EXERCISES = gql`
               duration
               exercise {
                 id
+                type
                 name
+                description
               }
             }
             ... on ExerciseWithReps {
@@ -22,7 +24,9 @@ const GET_EXERCISES = gql`
               reps
               exercise {
                 id
+                type
                 name
+                description
               }
             }
           }
