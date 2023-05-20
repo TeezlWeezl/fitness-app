@@ -8,11 +8,13 @@ import {
   ButtonNext,
 } from "pure-react-carousel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ActionButton } from "../ActionButton";
 
 import closeIcon from "../icon/close.svg";
 import prev from "../icon/Exercises__slider-prev.svg";
 import next from "../icon/Exercises__slider-next.svg";
+import info from "../icon/Exercises__info.svg";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import "./Exercises.style.css";
 
@@ -94,18 +96,47 @@ const renderSlide = ({
         /* Show a description info box if there is one 
         7a167e8e-594a-42a1-b062-57ddda7876a8 */
         description && (
-        <div
-          tabIndex="0"
-          className="absolute left-0 top-[90%] h-[80vh] w-full bg-white transition-all hover:top-[20%]"
-        >
-          <p className="mtext text-black">{description}</p>
-        </div>
-      )}
+          <button
+            tabIndex="1"
+            className="absolute left-0 top-[90%] h-[80vh] w-full rounded-t-[30px] bg-app-medium transition-all"
+            onClick={(e) => {
+              e.target.classList.remove("top-[90%]");
+              e.target.classList.add("top-[20%]");
+              for (const el of document.getElementsByClassName(
+                "slide-buttons"
+              )) {
+                el.classList.add("hidden");
+                el.classList.remove("block");
+              }
+            }}
+          >
+            <div className="absolute right-4 top-4 flex min-h-[35px] min-w-[35px] justify-center rounded-full bg-app-dark">
+              <img src={info} alt="exercise info" />
+            </div>
+            <div className="absolute bottom-3 min-h-[92%] p-9 text-left">
+              <h1 className="headline-1">{name}</h1>
+              <p className="mtext mt-5">{description}</p>
+            </div>
+            <ActionButton
+              className="absolute text-white bottom"
+              color="bg-app-dark"
+              onClick={(e) => {
+                e.target.parentElement.classList.remove("top-[20%]");
+                e.target.parentElement.classList.add("top-[90%]");
+                for (const el of document.getElementsByClassName("slide-buttons")) {
+                  el.classList.add("block");
+                  el.classList.remove("hidden");
+                }
+              }}
+            >
+              ok!
+            </ActionButton>
+          </button>
+        )
+      }
     </Slide>
   );
 };
-
-const renderInfoBox = (description) => {};
 
 function Exercises(props) {
   // extract the params from the url
@@ -154,7 +185,7 @@ function Exercises(props) {
           }
           naturalSlideHeight={window.innerHeight}
           totalSlides={exercises.length}
-          className="absolute top-0 z-0 w-full"
+          className="absolute top-0 w-full"
         >
           <Slider>
             {exercises.map(
@@ -176,12 +207,12 @@ function Exercises(props) {
               }
             )}
           </Slider>
-          <ButtonBack className="absolute top-[50%] min-h-[20%] w-16 translate-y-[-50%]">
+          <ButtonBack className="slide-buttons absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
             <div className="flex min-h-[100px] flex-row justify-center">
               <img src={prev} alt="previous" />
             </div>
           </ButtonBack>
-          <ButtonNext className="absolute right-0 top-[50%] min-h-[20%] w-16 translate-y-[-50%]">
+          <ButtonNext className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
             <div className="flex min-h-[100px] flex-row justify-center">
               <img src={next} alt="next" />
             </div>
