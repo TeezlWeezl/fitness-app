@@ -10,6 +10,7 @@ import { ProgramBrowser } from "./ProgramBrowser";
 import { UserProfile } from "./UserProfile";
 import { Program } from "./Program";
 import { Workout } from "./Workout";
+import { Exercises } from "./Exercises";
 
 const client = new ApolloClient({
   uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clgw946601iky01uig6lia0tz/master",
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "programs/:programId/:workoutId",
     element: <Workout />,
+  },
+  {
+    path: "programs/:programId/:workoutId/exercise",
+    element: <Exercises />
   },
   {
     path: "profile",
