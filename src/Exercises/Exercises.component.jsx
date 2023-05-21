@@ -48,6 +48,8 @@ const renderSlide = ({
   setIsPlaying,
 }) => {
   let exerciseContainer;
+  const infoBox = document.getElementById("info-box");
+  const slideButtons = document.getElementById("slide-buttons");
 
   if (type === "duration") {
     exerciseContainer = (
@@ -96,42 +98,36 @@ const renderSlide = ({
         /* Show a description info box if there is one 
         7a167e8e-594a-42a1-b062-57ddda7876a8 */
         description && (
-          <button
-            tabIndex="1"
-            className="absolute left-0 top-[90%] h-[80vh] w-full rounded-t-[30px] bg-app-medium transition-all"
-            onClick={(e) => {
-              e.target.classList.remove("top-[90%]");
-              e.target.classList.add("top-[20%]");
-              for (const el of document.getElementsByClassName(
-                "slide-buttons"
-              )) {
-                el.classList.add("hidden");
-                el.classList.remove("block");
-              }
-            }}
-          >
-            <div className="absolute right-4 top-4 flex min-h-[35px] min-w-[35px] justify-center rounded-full bg-app-dark">
-              <img src={info} alt="exercise info" />
-            </div>
-            <div className="absolute bottom-3 min-h-[92%] p-9 text-left">
-              <h1 className="headline-1">{name}</h1>
-              <p className="mtext mt-5">{description}</p>
+          <div id="info-box" className="absolute left-0 top-[90%] h-[80vh] w-full rounded-t-[30px] bg-app-medium transition-all">
+            <div
+              className="min-w-full min-h-full"
+              onClick={(e) => {
+                document.getElementById("slide-buttons").style.display = "none"
+                e.currentTarget.parentElement.classList.remove("top-[90%]");
+                e.currentTarget.parentElement.classList.add("top-[20%]");
+              }}
+            >
+              <div className="absolute right-4 top-4 flex min-h-[35px] min-w-[35px] justify-center rounded-full bg-app-dark">
+                <img src={info} alt="exercise info" />
+              </div>
+              <div className="absolute bottom-20 min-h-[80%] max-h-[80%] overflow-scroll p-9 text-left">
+                <h1 className="headline-1">{name}</h1>
+                <p className="mtext mt-5">{description}</p>
+              </div>
             </div>
             <ActionButton
-              className="absolute text-white bottom"
+              className="bottom absolute bottom-0 text-white"
               color="bg-app-dark"
               onClick={(e) => {
-                e.target.parentElement.classList.remove("top-[20%]");
-                e.target.parentElement.classList.add("top-[90%]");
-                for (const el of document.getElementsByClassName("slide-buttons")) {
-                  el.classList.add("block");
-                  el.classList.remove("hidden");
-                }
+                document.getElementById("slide-buttons").style.display = "block"
+                e.currentTarget.parentElement.classList.remove("top-[20%]");
+                e.currentTarget.parentElement.classList.add("top-[90%]");
+                e.currentTarget.previousElementSibling.children[1].scrollTop = 0
               }}
             >
               ok!
             </ActionButton>
-          </button>
+          </div>
         )
       }
     </Slide>
@@ -207,16 +203,18 @@ function Exercises(props) {
               }
             )}
           </Slider>
-          <ButtonBack className="slide-buttons absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
-            <div className="flex min-h-[100px] flex-row justify-center">
-              <img src={prev} alt="previous" />
-            </div>
-          </ButtonBack>
-          <ButtonNext className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
-            <div className="flex min-h-[100px] flex-row justify-center">
-              <img src={next} alt="next" />
-            </div>
-          </ButtonNext>
+          <div id="slide-buttons">
+            <ButtonBack className="absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
+              <div className="flex min-h-[100px] flex-row justify-center">
+                <img src={prev} alt="previous" />
+              </div>
+            </ButtonBack>
+            <ButtonNext className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
+              <div className="flex min-h-[100px] flex-row justify-center">
+                <img src={next} alt="next" />
+              </div>
+            </ButtonNext>
+          </div>
         </CarouselProvider>
       </div>
     );
