@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ActionButton } from "../ActionButton";
 import { WorkoutCard } from "../WorkoutCard";
 import { useProgram } from "../hooks/usePrograms";
@@ -7,9 +7,18 @@ import { useEffect, useState } from "react";
 import close from "../icon/close.svg";
 
 function Program(props) {
-  const [first, setFirst] = useState(3);
+  const [offset, setOffset] = useState(0);
   const { programId } = useParams();
-  const { error, data, loading } = useProgram(programId, first);
+  const { error, data, loading, fetchMore } = useProgram({
+    id: programId,
+    skip: 0,
+    first: 3,
+    onCompleted: () => {
+      setOffset((prev) => prev + 3);
+    }
+  }
+  );
+  const navigate = useNavigate();
 
   if (loading)
     return (
@@ -32,10 +41,12 @@ function Program(props) {
       description,
       focus,
       difficulty,
-      duration,
+      durationWeeks,
+      durationDays,
       color,
       programWorkoutSchedule,
     } = data.program;
+
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
         <Link to="/programs">
@@ -70,7 +81,7 @@ function Program(props) {
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <div className="min-h-[25px] min-w-[25px] max-w-[25px] rounded-full bg-app-medium"></div>
-              <p className="stext">{`${duration} Wochen`}</p>
+              <p className="stext">{`${durationWeeks} Wochen`}</p>
             </div>
           </div>
         </div>
@@ -82,19 +93,16 @@ function Program(props) {
         </div>
         <div className="mt-7 flex items-center justify-between px-6">
           <h3 id="workoutSchedule" className="headline-3">
-            {programWorkoutSchedule.length} Tage
+            {durationDays} Tage
           </h3>
-          <Link
+          <button
             className="stext"
             onClick={() => {
-              setFirst((prev) => 9999);
-              const view = document.getElementById("workoutSchedule");
-              view.scrollIntoView();
-              console.log("Success");
+              fetchMore({ variables: { skip: offset } });
             }}
           >
             Alle anzeigen
-          </Link>
+          </button>
         </div>
         {programWorkoutSchedule.map(
           ({
@@ -103,7 +111,7 @@ function Program(props) {
             completed,
             workout: { id: workoutId, category, workoutColor, duration, name },
           }) => (
-            <Link key={id} to={`${workoutId}`}>
+            <Link key={id} to={`${id}`}>
               <WorkoutCard
                 color={workoutColor}
                 category={category}
@@ -117,7 +125,18 @@ function Program(props) {
           )
         )}
 
-        <ActionButton color={color} size="145px">
+        <ActionButton
+          color={color}
+          size="145px"
+          onClick={() => {
+            for (const { completed, id } of programWorkoutSchedule) {
+              if (!completed) {
+                navigate(id);
+                return
+              }
+            }
+          }}
+        >
           jetzt starten
         </ActionButton>
       </div>
