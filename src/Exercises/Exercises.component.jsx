@@ -55,14 +55,19 @@ const renderSlide = ({
     exerciseContainer = (
       <div className="min-h-full">
         <button
-          onClick={() => setIsPlaying((prev) => !prev)}
+          onClick={() => setIsPlaying((prev) => {
+            // manipulate the state of only the exercise that is being used to toggle the timer
+            const newState = [...prev];
+            newState[index] = !newState[index];
+            return newState;
+          })}
           className="headline-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         >
           <CountdownCircleTimer
             trailColor="#4D5059"
             trailStrokeWidth={18}
             strokeWidth={18}
-            isPlaying={isPlaying}
+            isPlaying={isPlaying[index]}
             duration={duration}
             colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
             colorsTime={[duration, (duration * 2) / 3, (duration * 1) / 3, 0]}
@@ -140,7 +145,11 @@ function Exercises(props) {
   // connect the useExercises hook
   const { error, data, loading } = useExercises(programId, workoutId);
   // add state for start and stopping the timer
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState([]);
+  // set the state of isPlaying to false for each exercise once the data is loaded
+  useEffect(() => {
+    if (data) setIsPlaying(() => data.program.programWorkoutSchedule[0].workout.exercises.map(() => false))
+  }, [])
 
   if (loading)
     <div className="app-default">
