@@ -8,7 +8,7 @@ import {
   ButtonNext,
 } from "pure-react-carousel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActionButton } from "../ActionButton";
 
 import closeIcon from "../icon/close.svg";
@@ -46,10 +46,9 @@ const renderSlide = ({
   description,
   isPlaying,
   setIsPlaying,
+  slideButtons
 }) => {
   let exerciseContainer;
-  const infoBox = document.getElementById("info-box");
-  const slideButtons = document.getElementById("slide-buttons");
 
   if (type === "duration") {
     exerciseContainer = (
@@ -107,7 +106,7 @@ const renderSlide = ({
             <div
               className="min-w-full min-h-full"
               onClick={(e) => {
-                document.getElementById("slide-buttons").style.display = "none"
+                slideButtons.current.style.display = "none"
                 e.currentTarget.parentElement.classList.remove("top-[90%]");
                 e.currentTarget.parentElement.classList.add("top-[20%]");
               }}
@@ -124,7 +123,7 @@ const renderSlide = ({
               className="bottom absolute bottom-0 text-white"
               color="bg-app-dark"
               onClick={(e) => {
-                document.getElementById("slide-buttons").style.display = "block"
+                slideButtons.current.style.display = "block"
                 e.currentTarget.parentElement.classList.remove("top-[20%]");
                 e.currentTarget.parentElement.classList.add("top-[90%]");
                 e.currentTarget.previousElementSibling.children[1].scrollTop = 0
@@ -148,8 +147,12 @@ function Exercises(props) {
   const [isPlaying, setIsPlaying] = useState([]);
   // set the state of isPlaying to false for each exercise once the data is loaded
   useEffect(() => {
-    if (data) setIsPlaying(() => data.program.programWorkoutSchedule[0].workout.exercises.map(() => false))
+    if (data) {
+      setIsPlaying(() => data.program.programWorkoutSchedule[0].workout.exercises.map(() => false))
+    }
   }, [])
+  // reference the slide buttons to hide them when the info box is open
+  const slideButtons = useRef(0)
 
   if (loading)
     <div className="app-default">
@@ -208,11 +211,12 @@ function Exercises(props) {
                   reps,
                   isPlaying,
                   setIsPlaying,
+                  slideButtons
                 });
               }
             )}
           </Slider>
-          <div id="slide-buttons">
+          <div id="slide-buttons" ref={slideButtons}>
             <ButtonBack className="absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
               <div className="flex min-h-[100px] flex-row justify-center">
                 <img src={prev} alt="previous" />
