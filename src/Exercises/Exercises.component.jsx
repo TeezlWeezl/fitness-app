@@ -15,7 +15,7 @@ import closeIcon from "../icon/close.svg";
 import prev from "../icon/Exercises__slider-prev.svg";
 import next from "../icon/Exercises__slider-next.svg";
 import info from "../icon/Exercises__info.svg";
-import circle from "../icon/Exercises__circle_grey.svg"
+import circle from "../icon/Exercises__circle_grey.svg";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import "./Exercises.style.css";
 
@@ -164,7 +164,9 @@ function Exercises(props) {
   // reference the slide buttons to hide them when the info box is open
   const slideButtons = useRef(0);
   const progressBar = useRef(0);
-  const [progressBarXPos, setProgressBarXPos] = useState(-95);
+  const [progressBarPosX, setProgressBarPosX] = useState(undefined);
+  const [slideButtonIsClickable, setSlideButtonIsClickable] = useState({back: true, next: true});
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   if (loading)
     <div className="app-default">
@@ -192,15 +194,21 @@ function Exercises(props) {
             className="absolute right-5 top-5 z-10 w-4"
           />
         </Link>
-        <div className="flex justify-start items-center min-w-full left-[50%] absolute top-[10%] transition-all" ref={progressBar}>
+        <div
+          className="absolute lleft-[calc(50%)] top-[10%] flex min-w-full items-center justify-start transition-all"
+          ref={progressBar}
+          style={{ left: progressBarPosX ? `${progressBarPosX}px` : 'calc(50% - 12.5px)' }}
+        >
           {
             /* Show the progress bar */
             exercises.map((_, index) => (
-              <div className={`background-dotted pr-[70px] first-of-type:pl-0 last-of-type:pr-0 min-h-full`}>
               <div
-              key={index}
-              className={`min-h-[25px] min-w-[25px] rounded-full ${color}`}
-              ></div>
+                className={`background-dotted min-h-full pr-[70px] first-of-type:pl-0 last-of-type:pr-0`}
+              >
+                <div
+                  key={index}
+                  className={`min-h-[25px] min-w-[25px] rounded-full ${color}`}
+                ></div>
               </div>
             ))
           }
@@ -238,16 +246,49 @@ function Exercises(props) {
             )}
           </Slider>
           <div id="slide-buttons" ref={slideButtons}>
-            <ButtonBack className="absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
+            <ButtonBack
+              className="absolute top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]"
+              disabled={!slideButtonIsClickable.back}
+              onClick={() => {
+                if (currentSlide <= 0) {
+                  setSlideButtonIsClickable((prev) => (prev = {back: false, next: true}));
+                } else {
+                setSlideButtonIsClickable((prev) => (prev = {back: false, next: false}));
+                const currentProgressBarPosX =
+                  progressBar.current.getBoundingClientRect().x;
+                const newProgressBarPosX = currentProgressBarPosX + 95;
+                setProgressBarPosX((prev) => (prev = newProgressBarPosX));
+                setTimeout(() => {
+                  setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
+                }, 150);
+                  setCurrentSlide(prev => --prev);
+                }
+              }}
+            >
               <div className="flex min-h-[100px] flex-row justify-center">
                 <img src={prev} alt="previous" />
               </div>
             </ButtonBack>
-            <ButtonNext className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
-              <div className="flex min-h-[100px] flex-row justify-center" onClick={() => {
-                progressBar.current.classList.add(`translate-x-[${progressBarXPos}px]`)
-                setProgressBarXPos(prev => prev - 95)
-              }}>
+            <ButtonNext
+              className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]"
+              disabled={!slideButtonIsClickable.next}
+              onClick={() => {
+                if (currentSlide >= exercises.length - 1) {
+                  setSlideButtonIsClickable((prev) => (prev = {back: true, next: false}));
+                } else {
+                  setSlideButtonIsClickable((prev) => (prev = {back: false, next: false}));
+                  const currentProgressBarPosX =
+                    progressBar.current.getBoundingClientRect().x;
+                  const newProgressBarPosX = currentProgressBarPosX - 95;
+                  setProgressBarPosX((prev) => (prev = newProgressBarPosX));
+                  setTimeout(() => {
+                    setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
+                  }, 150);
+                  setCurrentSlide(prev => ++prev);
+                }
+              }}
+            >
+              <div className="flex min-h-[100px] flex-row justify-center">
                 <img src={next} alt="next" />
               </div>
             </ButtonNext>
