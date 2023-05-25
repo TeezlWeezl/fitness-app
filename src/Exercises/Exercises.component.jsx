@@ -15,6 +15,7 @@ import closeIcon from "../icon/close.svg";
 import prev from "../icon/Exercises__slider-prev.svg";
 import next from "../icon/Exercises__slider-next.svg";
 import info from "../icon/Exercises__info.svg";
+import circle from "../icon/Exercises__circle_grey.svg"
 import "pure-react-carousel/dist/react-carousel.es.css";
 import "./Exercises.style.css";
 
@@ -46,7 +47,7 @@ const renderSlide = ({
   description,
   isPlaying,
   setIsPlaying,
-  slideButtons
+  slideButtons,
 }) => {
   let exerciseContainer;
 
@@ -54,12 +55,14 @@ const renderSlide = ({
     exerciseContainer = (
       <div className="min-h-full">
         <button
-          onClick={() => setIsPlaying((prev) => {
-            // manipulate the state of only the exercise that is being used to toggle the timer
-            const newState = [...prev];
-            newState[index] = !newState[index];
-            return newState;
-          })}
+          onClick={() =>
+            setIsPlaying((prev) => {
+              // manipulate the state of only the exercise that is being used to toggle the timer
+              const newState = [...prev];
+              newState[index] = !newState[index];
+              return newState;
+            })
+          }
           className="headline-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         >
           <CountdownCircleTimer
@@ -99,14 +102,17 @@ const renderSlide = ({
     <Slide index={index} key={id}>
       {exerciseContainer}
       {
-        /* Show a description info box if there is one 
-        7a167e8e-594a-42a1-b062-57ddda7876a8 */
+        /* Show a description info box if there is one */
         description && (
-          <div id="info-box" className="absolute left-0 top-[90%] h-[80vh] w-full rounded-t-[30px] bg-app-medium transition-all">
+          <div
+            id="info-box"
+            className="absolute left-0 top-[90%] h-[80%] w-full rounded-t-[30px] bg-app-medium transition-all"
+          >
+            <div></div>
             <div
-              className="min-w-full min-h-full"
+              className="min-h-full min-w-full"
               onClick={(e) => {
-                slideButtons.current.style.display = "none"
+                slideButtons.current.classList.add("hidden");
                 e.currentTarget.parentElement.classList.remove("top-[90%]");
                 e.currentTarget.parentElement.classList.add("top-[20%]");
               }}
@@ -114,19 +120,19 @@ const renderSlide = ({
               <div className="absolute right-4 top-4 flex min-h-[35px] min-w-[35px] justify-center rounded-full bg-app-dark">
                 <img src={info} alt="exercise info" />
               </div>
-              <div className="absolute bottom-20 min-h-[80%] max-h-[80%] overflow-scroll p-9 text-left">
+              <div className="absolute top-[7%] min-h-[20%] overflow-scroll p-9 text-left">
                 <h1 className="headline-1">{name}</h1>
                 <p className="mtext mt-5">{description}</p>
               </div>
             </div>
             <ActionButton
-              className="bottom absolute bottom-0 text-white"
+              className="bottom absolute bottom-[5%] text-white"
               color="bg-app-dark"
               onClick={(e) => {
-                slideButtons.current.style.display = "block"
+                slideButtons.current.classList.remove("hidden");
                 e.currentTarget.parentElement.classList.remove("top-[20%]");
                 e.currentTarget.parentElement.classList.add("top-[90%]");
-                e.currentTarget.previousElementSibling.children[1].scrollTop = 0
+                e.currentTarget.previousElementSibling.children[1].scrollTop = 0;
               }}
             >
               ok!
@@ -148,11 +154,17 @@ function Exercises(props) {
   // set the state of isPlaying to false for each exercise once the data is loaded
   useEffect(() => {
     if (data) {
-      setIsPlaying(() => data.program.programWorkoutSchedule[0].workout.exercises.map(() => false))
+      setIsPlaying(() =>
+        data.program.programWorkoutSchedule[0].workout.exercises.map(
+          () => false
+        )
+      );
     }
-  }, [])
+  }, []);
   // reference the slide buttons to hide them when the info box is open
-  const slideButtons = useRef(0)
+  const slideButtons = useRef(0);
+  const progressBar = useRef(0);
+  const [progressBarXPos, setProgressBarXPos] = useState(-95);
 
   if (loading)
     <div className="app-default">
@@ -180,10 +192,18 @@ function Exercises(props) {
             className="absolute right-5 top-5 z-10 w-4"
           />
         </Link>
-        <div className="pt-[75px]">
-          <div
-            className={`min-h-[25px] max-w-[25px] rounded-full ${color}`}
-          ></div>
+        <div className="flex justify-start items-center min-w-full left-[50%] absolute top-[10%] transition-all" ref={progressBar}>
+          {
+            /* Show the progress bar */
+            exercises.map((_, index) => (
+              <div className={`background-dotted pr-[70px] first-of-type:pl-0 last-of-type:pr-0 min-h-full`}>
+              <div
+              key={index}
+              className={`min-h-[25px] min-w-[25px] rounded-full ${color}`}
+              ></div>
+              </div>
+            ))
+          }
         </div>
 
         <CarouselProvider
@@ -194,8 +214,9 @@ function Exercises(props) {
           naturalSlideHeight={window.innerHeight}
           totalSlides={exercises.length}
           className="absolute top-0 w-full"
+          touchEnabled={false}
         >
-          <Slider>
+          <Slider className="relative">
             {exercises.map(
               (
                 { id, duration, reps, exercise: { type, name, description } },
@@ -211,7 +232,7 @@ function Exercises(props) {
                   reps,
                   isPlaying,
                   setIsPlaying,
-                  slideButtons
+                  slideButtons,
                 });
               }
             )}
@@ -223,7 +244,10 @@ function Exercises(props) {
               </div>
             </ButtonBack>
             <ButtonNext className="slide-buttons absolute right-0 top-[50%] min-h-[20%] w-[18%] translate-y-[-50%]">
-              <div className="flex min-h-[100px] flex-row justify-center">
+              <div className="flex min-h-[100px] flex-row justify-center" onClick={() => {
+                progressBar.current.classList.add(`translate-x-[${progressBarXPos}px]`)
+                setProgressBarXPos(prev => prev - 95)
+              }}>
                 <img src={next} alt="next" />
               </div>
             </ButtonNext>
