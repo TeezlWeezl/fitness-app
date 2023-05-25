@@ -195,7 +195,7 @@ function Exercises(props) {
           />
         </Link>
         <div
-          className="absolute lleft-[calc(50%)] top-[10%] flex min-w-full items-center justify-start transition-all"
+          className="absolute lleft-[calc(50%)] top-[10%] flex min-w-full items-center justify-start transition-all duration-500 ease-[cubic-bezier(.645,.045,.355,1)]"
           ref={progressBar}
           style={{ left: progressBarPosX ? `${progressBarPosX}px` : 'calc(50% - 12.5px)' }}
         >
@@ -204,9 +204,9 @@ function Exercises(props) {
             exercises.map((_, index) => (
               <div
                 className={`background-dotted min-h-full pr-[70px] first-of-type:pl-0 last-of-type:pr-0`}
+                key={index}
               >
                 <div
-                  key={index}
                   className={`min-h-[25px] min-w-[25px] rounded-full ${color}`}
                 ></div>
               </div>
@@ -224,7 +224,9 @@ function Exercises(props) {
           className="absolute top-0 w-full"
           touchEnabled={false}
         >
-          <Slider className="relative">
+          <Slider 
+          className="relative"
+          >
             {exercises.map(
               (
                 { id, duration, reps, exercise: { type, name, description } },
@@ -260,7 +262,7 @@ function Exercises(props) {
                 setProgressBarPosX((prev) => (prev = newProgressBarPosX));
                 setTimeout(() => {
                   setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
-                }, 150);
+                }, 500);
                   setCurrentSlide(prev => --prev);
                 }
               }}
@@ -283,7 +285,7 @@ function Exercises(props) {
                   setProgressBarPosX((prev) => (prev = newProgressBarPosX));
                   setTimeout(() => {
                     setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
-                  }, 150);
+                  }, 500);
                   setCurrentSlide(prev => ++prev);
                 }
               }}
