@@ -1,3 +1,6 @@
-.infoBoxActive {
-  background-color: green;
+.background-dotted {
+  background: url('../icon/Exercises__circle_grey.svg');
+  background-position-y: 80%;
+  background-size: .7rem;
+  background-repeat: repeat-x;
 }

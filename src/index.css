@@ -26,8 +26,12 @@
   }
 
   .app-default {
-    @apply min-h-screen bg-app-dark px-4 py-10 pb-16
+    @apply fixed min-w-full min-h-full bg-app-dark px-4 py-10 pb-16;
   }
+}
+
+html {
+  height: 100%;
 }
 
 body {
