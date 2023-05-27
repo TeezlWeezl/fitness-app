@@ -120,13 +120,13 @@ const renderSlide = ({
               <div className="absolute right-4 top-4 flex min-h-[35px] min-w-[35px] justify-center rounded-full bg-app-dark">
                 <img src={info} alt="exercise info" />
               </div>
-              <div className="absolute top-[7%] min-h-[20%] overflow-scroll p-9 text-left">
+              <div className="absolute top-[15%] max-h-[70%] overflow-scroll px-9 text-left">
                 <h1 className="headline-1">{name}</h1>
                 <p className="mtext mt-5">{description}</p>
               </div>
             </div>
             <ActionButton
-              className="bottom absolute bottom-[5%] text-white"
+              className="bottom absolute top-[87%] text-white"
               color="bg-app-dark"
               onClick={(e) => {
                 slideButtons.current.classList.remove("hidden");
@@ -165,7 +165,10 @@ function Exercises(props) {
   const slideButtons = useRef(0);
   const progressBar = useRef(0);
   const [progressBarPosX, setProgressBarPosX] = useState(undefined);
-  const [slideButtonIsClickable, setSlideButtonIsClickable] = useState({back: true, next: true});
+  const [slideButtonIsClickable, setSlideButtonIsClickable] = useState({
+    back: true,
+    next: true,
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
 
   if (loading)
@@ -195,19 +198,22 @@ function Exercises(props) {
           />
         </Link>
         <div
-          className="absolute lleft-[calc(50%)] top-[10%] flex min-w-full items-center justify-start transition-all duration-500 ease-[cubic-bezier(.645,.045,.355,1)]"
+          className="absolute left-[calc(50%-5px)] top-[12%] flex min-w-full items-center justify-start transition-all duration-500 ease-[cubic-bezier(.645,.045,.355,1)]"
           ref={progressBar}
-          style={{ left: progressBarPosX ? `${progressBarPosX}px` : 'calc(50% - 12.5px)' }}
+          style={{ left: progressBarPosX && `${progressBarPosX}px` }}
         >
           {
             /* Show the progress bar */
             exercises.map((_, index) => (
               <div
-                className={`background-dotted min-h-full pr-[70px] first-of-type:pl-0 last-of-type:pr-0`}
+                className={`background-dotted ml-[18px] mr-[8px] min-h-full pr-[70px] first-of-type:pl-0 last-of-type:bg-none last-of-type:pr-0`}
                 key={index}
               >
                 <div
-                  className={`min-h-[25px] min-w-[25px] rounded-full ${color}`}
+                  className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-[5px] border-app-medium ${
+                    /* Only show colored circle, if it is the current slide */
+                    currentSlide === index && `${color} border-none`
+                  }`}
                 ></div>
               </div>
             ))
@@ -224,9 +230,7 @@ function Exercises(props) {
           className="absolute top-0 w-full"
           touchEnabled={false}
         >
-          <Slider 
-          className="relative"
-          >
+          <Slider className="relative">
             {exercises.map(
               (
                 { id, duration, reps, exercise: { type, name, description } },
@@ -253,17 +257,24 @@ function Exercises(props) {
               disabled={!slideButtonIsClickable.back}
               onClick={() => {
                 if (currentSlide <= 0) {
-                  setSlideButtonIsClickable((prev) => (prev = {back: false, next: true}));
+                  setSlideButtonIsClickable(
+                    (prev) => (prev = { back: false, next: true })
+                  );
                 } else {
-                setSlideButtonIsClickable((prev) => (prev = {back: false, next: false}));
-                const currentProgressBarPosX =
-                  progressBar.current.getBoundingClientRect().x;
-                const newProgressBarPosX = currentProgressBarPosX + 95;
-                setProgressBarPosX((prev) => (prev = newProgressBarPosX));
-                setTimeout(() => {
-                  setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
-                }, 500);
-                  setCurrentSlide(prev => --prev);
+                  setSlideButtonIsClickable(
+                    (prev) => (prev = { back: false, next: false })
+                  );
+                  const currentProgressBarPosX =
+                    progressBar.current.getBoundingClientRect().x;
+                  // width 25px + padding 70px + margin (left: 18px right: 8px) = 121px
+                  const newProgressBarPosX = currentProgressBarPosX + 121;
+                  setProgressBarPosX((prev) => (prev = newProgressBarPosX));
+                  setTimeout(() => {
+                    setSlideButtonIsClickable(
+                      (prev) => (prev = { back: true, next: true })
+                    );
+                  }, 500);
+                  setCurrentSlide((prev) => --prev);
                 }
               }}
             >
@@ -276,17 +287,24 @@ function Exercises(props) {
               disabled={!slideButtonIsClickable.next}
               onClick={() => {
                 if (currentSlide >= exercises.length - 1) {
-                  setSlideButtonIsClickable((prev) => (prev = {back: true, next: false}));
+                  setSlideButtonIsClickable(
+                    (prev) => (prev = { back: true, next: false })
+                  );
                 } else {
-                  setSlideButtonIsClickable((prev) => (prev = {back: false, next: false}));
+                  setSlideButtonIsClickable(
+                    (prev) => (prev = { back: false, next: false })
+                  );
                   const currentProgressBarPosX =
                     progressBar.current.getBoundingClientRect().x;
-                  const newProgressBarPosX = currentProgressBarPosX - 95;
+                  // width 25px + padding 70px + margin (left: 18px right: 8px) = 121px
+                  const newProgressBarPosX = currentProgressBarPosX - 121;
                   setProgressBarPosX((prev) => (prev = newProgressBarPosX));
                   setTimeout(() => {
-                    setSlideButtonIsClickable((prev) => (prev = {back: true, next: true}));
+                    setSlideButtonIsClickable(
+                      (prev) => (prev = { back: true, next: true })
+                    );
                   }, 500);
-                  setCurrentSlide(prev => ++prev);
+                  setCurrentSlide((prev) => ++prev);
                 }
               }}
             >
