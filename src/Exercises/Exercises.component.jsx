@@ -15,11 +15,19 @@ import closeIcon from "../icon/close.svg";
 import prev from "../icon/Exercises__slider-prev.svg";
 import next from "../icon/Exercises__slider-next.svg";
 import info from "../icon/Exercises__info.svg";
+import bell3x from "../audio/bell-3x.mp3";
+import bell1x from "../audio/bell-1x.mp3";
 import circle from "../icon/Exercises__circle_grey.svg";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import "./Exercises.style.css";
 
-const renderTime = ({ remainingTime }, startTime, exerciseDuration) => {
+const renderTime = (
+  { remainingTime },
+  startTime,
+  exerciseDuration,
+  type,
+  bellsActive
+) => {
   if (remainingTime === startTime) {
     return (
       <div>
@@ -28,27 +36,52 @@ const renderTime = ({ remainingTime }, startTime, exerciseDuration) => {
         <div className="mtext">starten</div>
       </div>
     );
-  } else if (remainingTime <= startTime && remainingTime >= exerciseDuration) {
+  } else if (remainingTime <= startTime && remainingTime > exerciseDuration) {
     return (
       <div>
         <div className="mtext">Get</div>
         <div className="mtext text-3xl">{remainingTime - exerciseDuration}</div>
         <div className="mtext">Ready</div>
       </div>
-    )
+    );
+  } else if (remainingTime === exerciseDuration) {
+    // Ring the starting bell once for exercises
+    if (type === "duration") {
+      if (!bellsActive.current) {
+        new Audio(bell1x).play();
+        bellsActive.current = true;
+      }
+      return (
+        <div>
+          <div className="mtext text-3xl">Go!</div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        <div className="mtext">Get</div>
+        <div className="mtext text-3xl">{remainingTime - exerciseDuration}</div>
+        <div className="mtext">Ready</div>
+      </div>
+    );
   } else if (remainingTime < exerciseDuration && remainingTime > 0) {
     return (
-    <div>
-    <div className="mtext">Verbleibend</div>
-    <div className="mtext text-3xl">{remainingTime}</div>
-    <div className="mtext">Sekunden</div>
-    </div>
+      <div>
+        <div className="mtext">Verbleibend</div>
+        <div className="mtext text-3xl">{remainingTime}</div>
+        <div className="mtext">Sekunden</div>
+      </div>
     );
   } else {
+    // Ring the bell three times for exercises
+    if (type === "duration" && bellsActive.current) {
+      new Audio(bell3x).play();
+      bellsActive.current = false;
+    }
+    // Reset the helper variable that next exercise can start
     return <div className="mtext text-3xl">Fertig</div>;
   }
-} 
-
+};
 
 const renderSlide = ({
   index,
@@ -61,6 +94,8 @@ const renderSlide = ({
   isPlaying,
   setIsPlaying,
   slideButtons,
+  bellsActive,
+  timerActive,
 }) => {
   let exerciseContainer;
 
@@ -68,14 +103,18 @@ const renderSlide = ({
     exerciseContainer = (
       <div className="min-h-full">
         <button
-          onClick={() =>
-            setIsPlaying((prev) => {
-              // manipulate the state of only the exercise that is being used to toggle the timer
-              const newState = [...prev];
-              newState[index] = !newState[index];
-              return newState;
-            })
-          }
+          onClick={() => {
+            // if the timer is not active, toggle the timer
+            if (!timerActive.current) {
+              setIsPlaying((prev) => {
+                // manipulate the state of only the exercise that is being used to toggle the timer
+                const newState = [...prev];
+                newState[index] = !newState[index];
+                return newState;
+              });
+              timerActive.current = true;
+            }
+          }}
           className="headline-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         >
           <CountdownCircleTimer
@@ -86,10 +125,21 @@ const renderSlide = ({
             duration={duration}
             colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
             colorsTime={[duration, (duration * 2) / 3, (duration * 1) / 3, 0]}
-            onComplete={() => ({ shouldRepeat: false })}
-            initialRemainingTime={type !== 'break' && duration + 6}
+            onComplete={() => {
+              timerActive.current = false;
+              return { shouldRepeat: false };
+            }}
+            initialRemainingTime={type !== "break" && duration + 6}
           >
-            {({ remainingTime }) => renderTime({ remainingTime }, type === 'break' ? duration : duration + 6, duration)}
+            {({ remainingTime }) =>
+              renderTime(
+                { remainingTime },
+                type === "break" ? duration : duration + 6,
+                duration,
+                type,
+                bellsActive
+              )
+            }
           </CountdownCircleTimer>
         </button>
         <h1 className="headline-1 absolute bottom-[30%] left-[50%] translate-x-[-50%] text-center">
@@ -178,6 +228,10 @@ function Exercises(props) {
   // reference the slide buttons to hide them when the info box is open
   const slideButtons = useRef(0);
   const progressBar = useRef(0);
+  // helper variable to ring the bell only once in renderTime()
+  let bellsActive = useRef(false);
+  // helper variable to prevent the timer from being started when another timer is already running
+  let timerActive = useRef(false);
   const [progressBarPosX, setProgressBarPosX] = useState(undefined);
   const [slideButtonIsClickable, setSlideButtonIsClickable] = useState({
     back: true,
@@ -261,6 +315,8 @@ function Exercises(props) {
                   isPlaying,
                   setIsPlaying,
                   slideButtons,
+                  bellsActive,
+                  timerActive,
                 });
               }
             )}
