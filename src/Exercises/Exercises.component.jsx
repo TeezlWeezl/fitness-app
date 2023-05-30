@@ -19,23 +19,36 @@ import circle from "../icon/Exercises__circle_grey.svg";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import "./Exercises.style.css";
 
-const renderTime = ({ remainingTime }) => {
-  // if (remainingTime === startTime) {
-  //   return <div className="mtext">Klicken zum starten!</div>;
-  // }
-
-  if (remainingTime === 0) {
+const renderTime = ({ remainingTime }, startTime, exerciseDuration) => {
+  if (remainingTime === startTime) {
+    return (
+      <div>
+        <div className="mtext">Klicken</div>
+        <div className="mtext">zum</div>
+        <div className="mtext">starten</div>
+      </div>
+    );
+  } else if (remainingTime <= startTime && remainingTime >= exerciseDuration) {
+    return (
+      <div>
+        <div className="mtext">Get</div>
+        <div className="mtext text-3xl">{remainingTime - exerciseDuration}</div>
+        <div className="mtext">Ready</div>
+      </div>
+    )
+  } else if (remainingTime < exerciseDuration && remainingTime > 0) {
+    return (
+    <div>
+    <div className="mtext">Verbleibend</div>
+    <div className="mtext text-3xl">{remainingTime}</div>
+    <div className="mtext">Sekunden</div>
+    </div>
+    );
+  } else {
     return <div className="mtext text-3xl">Fertig</div>;
   }
+} 
 
-  return (
-    <div>
-      <div className="mtext">Verbleibend</div>
-      <div className="mtext text-3xl">{remainingTime}</div>
-      <div className="mtext">Sekunden</div>
-    </div>
-  );
-};
 
 const renderSlide = ({
   index,
@@ -51,7 +64,7 @@ const renderSlide = ({
 }) => {
   let exerciseContainer;
 
-  if (type === "duration") {
+  if (type === "duration" || type === "break") {
     exerciseContainer = (
       <div className="min-h-full">
         <button
@@ -74,8 +87,9 @@ const renderSlide = ({
             colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
             colorsTime={[duration, (duration * 2) / 3, (duration * 1) / 3, 0]}
             onComplete={() => ({ shouldRepeat: false })}
+            initialRemainingTime={type !== 'break' && duration + 6}
           >
-            {renderTime}
+            {({ remainingTime }) => renderTime({ remainingTime }, type === 'break' ? duration : duration + 6, duration)}
           </CountdownCircleTimer>
         </button>
         <h1 className="headline-1 absolute bottom-[30%] left-[50%] translate-x-[-50%] text-center">
