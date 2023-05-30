@@ -25,8 +25,9 @@
     @apply text-base font-normal font-poppins text-app-light
   }
 
+  /* Using top-0 bottom-0 left-0 right-0 to make sure the modal is full screen */
   .app-default {
-    @apply fixed min-w-full min-h-full bg-app-dark px-4 py-10 pb-16;
+    @apply fixed top-0 bottom-0 left-0 right-0 overflow-y-scroll overflow-x-hidden bg-app-dark px-4 py-10 pb-16;
   }
 }
 
