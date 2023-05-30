@@ -104,17 +104,27 @@ const renderSlide = ({
       <div className="min-h-full">
         <button
           onClick={() => {
+            // The function calls below are necessary to prevent that multiple timers are running at the same time
+
             // if the timer is not active, toggle the timer
             if (!timerActive.current) {
               setIsPlaying((prev) => {
-                // manipulate the state of only the exercise that is being used to toggle the timer
                 const newState = [...prev];
                 newState[index] = !newState[index];
                 return newState;
               });
               timerActive.current = true;
+              return
             }
-          }}
+            // if the timer is active, toggle the timer only of the exercise that is currently running
+            if (timerActive.current && isPlaying[index]) {
+              setIsPlaying((prev) => {
+                const newState = [...prev];
+                newState[index] = !newState[index];
+                return newState;
+            })
+            timerActive.current = false;
+          }}}
           className="headline-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         >
           <CountdownCircleTimer
