@@ -10,7 +10,7 @@ const ProgressCircle = ({ index, currentSlide, color, exercisesFinished }) => {
   } else if (exercisesFinished[index]) {
     return (
       <div
-        className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-none bg-green-500`}
+        className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-none finished-circle`}
       ></div>
     );
   } else

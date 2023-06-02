@@ -82,6 +82,7 @@ const SlideContent = ({
   bellsActive,
   timerActive,
   setExercisesFinished,
+  color,
 }) => {
   let exerciseContainer;
 
@@ -159,6 +160,18 @@ const SlideContent = ({
         <h1 className="headline-1 absolute bottom-[30%] left-[50%] translate-x-[-50%] text-center">
           {name}
         </h1>
+        <ActionButton
+          className="bottom absolute top-[80%] bg-app-"
+          color={color}
+          onClick={(e) => {
+            setExercisesFinished(prev => {
+              prev[index] = true;
+              return prev;
+            })
+          }}
+        >
+          geschafft
+        </ActionButton>
       </div>
     );
   }

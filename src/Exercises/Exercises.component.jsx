@@ -129,6 +129,7 @@ function Exercises(props) {
                     timerActive={timerActive}
                     exercisesFinished={exercisesFinished}
                     setExercisesFinished={setExercisesFinished}
+                    color={color}
                   />
                 );
               }
