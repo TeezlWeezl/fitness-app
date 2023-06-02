@@ -96,6 +96,7 @@ const renderSlide = ({
   slideButtons,
   bellsActive,
   timerActive,
+  setExercisesFinished,
 }) => {
   let exerciseContainer;
 
@@ -114,7 +115,7 @@ const renderSlide = ({
                 return newState;
               });
               timerActive.current = true;
-              return
+              return;
             }
             // if the timer is active, toggle the timer only of the exercise that is currently running
             if (timerActive.current && isPlaying[index]) {
@@ -122,9 +123,10 @@ const renderSlide = ({
                 const newState = [...prev];
                 newState[index] = !newState[index];
                 return newState;
-            })
-            timerActive.current = false;
-          }}}
+              });
+              timerActive.current = false;
+            }
+          }}
           className="headline-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
         >
           <CountdownCircleTimer
@@ -137,6 +139,10 @@ const renderSlide = ({
             colorsTime={[duration, (duration * 2) / 3, (duration * 1) / 3, 0]}
             onComplete={() => {
               timerActive.current = false;
+              setExercisesFinished((prev) => {
+                prev[index] = true;
+                return prev;
+              });
               return { shouldRepeat: false };
             }}
             initialRemainingTime={type !== "break" && duration + 6}
@@ -218,6 +224,28 @@ const renderSlide = ({
   );
 };
 
+const ProgressCircle = ({ index, currentSlide, color, exercisesFinished }) => {
+  if (currentSlide === index) {
+    /* Only show colored circle, if it is the current slide */
+    return (
+      <div
+        className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-none ${color}`}
+      ></div>
+    );
+  } else if (exercisesFinished[index]) {
+    return (
+      <div
+        className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-none bg-green-500`}
+      ></div>
+    );
+  } else
+    return (
+      <div
+        className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-[5px] border-app-medium`}
+      ></div>
+    );
+};
+
 function Exercises(props) {
   // extract the params from the url
   const { programId, workoutId } = useParams();
@@ -226,15 +254,6 @@ function Exercises(props) {
   // add state for start and stopping the timer
   const [isPlaying, setIsPlaying] = useState([]);
   // set the state of isPlaying to false for each exercise once the data is loaded
-  useEffect(() => {
-    if (data) {
-      setIsPlaying(() =>
-        data.program.programWorkoutSchedule[0].workout.exercises.map(
-          () => false
-        )
-      );
-    }
-  }, []);
   // reference the slide buttons to hide them when the info box is open
   const slideButtons = useRef(0);
   const progressBar = useRef(0);
@@ -248,6 +267,15 @@ function Exercises(props) {
     next: true,
   });
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [exercisesFinished, setExercisesFinished] = useState([]);
+  useEffect(() => {
+    if (data) {
+      const exercises =
+        data.program.programWorkoutSchedule[0].workout.exercises;
+      setIsPlaying(() => exercises.map(() => false));
+      setExercisesFinished(() => exercises.map(() => false));
+    }
+  }, [data]);
 
   if (loading)
     <div className="app-default">
@@ -287,12 +315,12 @@ function Exercises(props) {
                 className={`background-dotted ml-[18px] mr-[8px] min-h-full pr-[70px] first-of-type:pl-0 last-of-type:bg-none last-of-type:pr-0`}
                 key={index}
               >
-                <div
-                  className={`min-h-[25px] min-w-[25px] -translate-x-[20px] rounded-full border-[5px] border-app-medium ${
-                    /* Only show colored circle, if it is the current slide */
-                    currentSlide === index && `${color} border-none`
-                  }`}
-                ></div>
+                <ProgressCircle
+                  index={index}
+                  currentSlide={currentSlide}
+                  color={color}
+                  exercisesFinished={exercisesFinished}
+                />
               </div>
             ))
           }
@@ -327,6 +355,8 @@ function Exercises(props) {
                   slideButtons,
                   bellsActive,
                   timerActive,
+                  exercisesFinished,
+                  setExercisesFinished,
                 });
               }
             )}
