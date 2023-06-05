@@ -2,7 +2,7 @@ import {
   ButtonBack,
   ButtonNext,
   CarouselProvider,
-  Slider
+  Slider,
 } from "pure-react-carousel";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -15,6 +15,71 @@ import next from "../icon/Exercises__slider-next.svg";
 import prev from "../icon/Exercises__slider-prev.svg";
 import closeIcon from "../icon/close.svg";
 import "./Exercises.style.css";
+
+const Modal = ({ setIsModalOpen, contentType }) => {
+  const renderContent = (contentType) => {
+    if (contentType === "exerciseFinished")
+      return (
+        <>
+          <div>
+            {/*Header of the Modal*/}
+            <h1>Exercise Finished</h1>
+          </div>
+          <div>
+            {/*Body of the Modal*/}
+            <p>This is the body of the modal</p>
+          </div>
+          <div>
+            {/*Footer of the Modal*/}
+            <button
+              className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+              onClick={() => {
+                setIsModalOpen(() => false);
+              }}
+            >
+              X
+            </button>
+          </div>
+        </>
+      );
+    else if (contentType === "exerciseCanceled")
+      return (
+        <>
+          <div>
+            {/*Header of the Modal*/}
+            <h1>Exercise Canceled</h1>
+          </div>
+          <div>
+            {/*Body of the Modal*/}
+            <p>This is the body of the modal</p>
+          </div>
+          <div>
+            {/*Footer of the Modal*/}
+            <button
+              className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+              onClick={() => {
+                setIsModalOpen(() => false);
+              }}
+            >
+              X
+            </button>
+          </div>
+        </>
+      );
+  };
+
+  return (
+    <div className="relative min-h-full min-w-full">
+      /*Background of the Modal*/
+      <div
+        className={`absolute top-0 z-20 min-h-full min-w-full bg-app-medium opacity-75`}
+      ></div>
+      <div className="absolute left-[50%] top-[50%] z-30 -translate-x-1/2 -translate-y-1/2 bg-green-200">
+        {renderContent(contentType)}
+      </div>
+    </div>
+  );
+};
 
 function Exercises(props) {
   // extract the params from the url
@@ -38,6 +103,7 @@ function Exercises(props) {
   });
   const [currentSlide, setCurrentSlide] = useState(0);
   const [exercisesFinished, setExercisesFinished] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     if (data) {
       const exercises =
@@ -95,6 +161,21 @@ function Exercises(props) {
             ))
           }
         </div>
+
+        <button
+          className="absolute top-0 z-10 text-white"
+          onClick={() => {
+            setIsModalOpen(() => true);
+          }}
+        >
+          Modal
+        </button>
+        {isModalOpen && (
+          <Modal
+            contentType="exerciseCanceled"
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
 
         <CarouselProvider
           naturalSlideWidth={
