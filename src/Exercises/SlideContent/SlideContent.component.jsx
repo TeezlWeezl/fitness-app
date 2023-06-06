@@ -131,12 +131,12 @@ const SlideContent = ({
               });
               return { shouldRepeat: false };
             }}
-            initialRemainingTime={type !== "break" && duration + 6}
+            initialRemainingTime={type !== "break" && duration + 5}
           >
             {({ remainingTime }) =>
               renderTime(
                 { remainingTime },
-                type === "break" ? duration : duration + 6,
+                type === "break" ? duration : duration + 5,
                 duration,
                 type,
                 bellsActive
