@@ -85,7 +85,7 @@ const Modal = ({ setIsModalOpen, contentType, programId, workoutId }) => {
             <button
               className="stext mtext mt-3 min-w-full rounded-md bg-app-medium p-3"
               onClick={(e) => {
-                navigate(`/programs/${programId}/${workoutId}`);
+                navigate(`/programs/${programId}`);
               }}
             >
               Workout beenden

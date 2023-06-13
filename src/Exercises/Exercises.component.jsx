@@ -54,7 +54,6 @@ function Exercises(props) {
       setExercisesFinished(() => exercises.map(() => false));
     }
   }, [data]);
-  const navigate = useNavigate();
 
   if (loading)
     <div className="app-default">
@@ -77,7 +76,7 @@ function Exercises(props) {
       <div className="app-default min-w-full p-0">
         <button
           onClick={() => {
-            setIsModalOpen(({ type, isOpen }) => ({
+            setIsModalOpen(() => ({
               isOpen: true,
               type: "exerciseCanceled",
             }));
@@ -158,6 +157,7 @@ function Exercises(props) {
                     exercisesFinished={exercisesFinished}
                     setExercisesFinished={setExercisesFinished}
                     color={color}
+                    setIsModalOpen={setIsModalOpen}
                   />
                 );
               }

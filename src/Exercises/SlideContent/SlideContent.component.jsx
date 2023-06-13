@@ -1,6 +1,7 @@
 import { Slide } from "pure-react-carousel";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { ActionButton } from '../../ActionButton';
+import { ActionButton } from "../../ActionButton";
+import { Modal } from "../Modal";
 
 import bell1x from "../../audio/bell-1x.mp3";
 import bell3x from "../../audio/bell-3x.mp3";
@@ -81,8 +82,10 @@ const SlideContent = ({
   slideButtons,
   bellsActive,
   timerActive,
+  exercisesFinished,
   setExercisesFinished,
   color,
+  setIsModalOpen,
 }) => {
   let exerciseContainer;
 
@@ -129,6 +132,12 @@ const SlideContent = ({
                 prev[index] = true;
                 return prev;
               });
+              // toggles the modal if all exercises are finished
+              if (exercisesFinished.every((e) => e === true))
+                setIsModalOpen(() => ({
+                  isOpen: true,
+                  type: "exerciseFinished",
+                }));
               return { shouldRepeat: false };
             }}
             initialRemainingTime={type !== "break" && duration + 5}
@@ -161,13 +170,19 @@ const SlideContent = ({
           {name}
         </h1>
         <ActionButton
-          className="bottom absolute top-[80%] bg-app-"
+          className="bottom bg-app- absolute top-[80%]"
           color={color}
           onClick={(e) => {
-            setExercisesFinished(prev => {
+            setExercisesFinished((prev) => {
               prev[index] = true;
               return prev;
-            })
+            });
+            // toggles the modal if all exercises are finished
+            if (exercisesFinished.every((e) => e === true))
+              setIsModalOpen(() => ({
+                isOpen: true,
+                type: "exerciseFinished",
+              }));
           }}
         >
           geschafft
