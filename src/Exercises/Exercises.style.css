@@ -4,3 +4,8 @@
   background-size: .7rem;
   background-repeat: repeat-x;
 }
+
+.finished-circle {
+  background: url(../icon/checkmark.svg);
+  background-size: cover;
+}
