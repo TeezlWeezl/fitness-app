@@ -1,13 +1,5 @@
 import { useQuery, gql } from "@apollo/client";
-
-const CORE_PROGRAM_FIELDS = gql`
-  fragment CoreProgramFields on Program {
-    id
-    name
-    color
-    isActive
-  }
-`;
+import { CORE_PROGRAM_FIELDS } from "../hooks/fragments";
 
 const GET_PROGRAMS = gql`
   ${CORE_PROGRAM_FIELDS}
@@ -61,6 +53,18 @@ const GET_ACTIVE_PROGRAMS = gql`
   }
 `;
 
+const GET_ACTIVE_PROGRAMS_STATS = gql`
+  ${CORE_PROGRAM_FIELDS}
+  query ActivePrograms {
+    programs(where: { isActive: true }) {
+      ...CoreProgramFields
+      programWorkoutSchedule {
+        completed
+      }
+    }
+  }
+`
+
 export const usePrograms = () => {
   const { error, data, loading } = useQuery(GET_PROGRAMS);
 
@@ -85,12 +89,22 @@ export const useProgram = ({ id, first, skip, onCompleted }) => {
   };
 };
 
-export const useActivePrograms = () => {
-  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS);
+export const useActivePrograms = ({ useCase }) => {
+  if (useCase === "dashboard") {
+    const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS);
 
-  return {
-    error,
-    data,
-    loading,
-  };
+    return {
+      error,
+      data,
+      loading,
+    };
+  } else if (useCase === "profile") {
+    const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS_STATS);
+
+    return {
+      error,
+      data,
+      loading,
+    };
+  }
 };

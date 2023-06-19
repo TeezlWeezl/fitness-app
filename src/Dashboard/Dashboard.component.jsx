@@ -6,7 +6,7 @@ import "./Dashboard.style.css";
 import workoutImg from "../img/dashboard__workout.svg";
 
 export function Dashboard() {
-  const { data, loading, error } = useActivePrograms();
+  const { data, loading, error } = useActivePrograms({useCase: 'dashboard'});
 
   if (loading) return <p>Loading...</p>;
 
