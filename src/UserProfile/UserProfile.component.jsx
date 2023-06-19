@@ -1,9 +1,9 @@
 import { ActionCard } from "../ActionCard";
 import { Navbar } from "../Navbar";
-import { useActivePrograms } from "../hooks/usePrograms";
+import { useProgramsStats } from "../hooks/usePrograms";
 
 const UserProfile = () => {
-  const { data, loading, error } = useActivePrograms({ useCase: "profile" });
+  const { data, loading, error } = useProgramsStats();
 
   if (loading) {
     return <p>Loading...</p>;

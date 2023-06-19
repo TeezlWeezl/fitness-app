@@ -55,7 +55,7 @@ const GET_ACTIVE_PROGRAMS = gql`
 
 const GET_ACTIVE_PROGRAMS_STATS = gql`
   ${CORE_PROGRAM_FIELDS}
-  query ActivePrograms {
+  query {
     programs(where: { isActive: true }) {
       ...CoreProgramFields
       programWorkoutSchedule {
@@ -63,7 +63,7 @@ const GET_ACTIVE_PROGRAMS_STATS = gql`
       }
     }
   }
-`
+`;
 
 export const usePrograms = () => {
   const { error, data, loading } = useQuery(GET_PROGRAMS);
@@ -89,22 +89,22 @@ export const useProgram = ({ id, first, skip, onCompleted }) => {
   };
 };
 
-export const useActivePrograms = ({ useCase }) => {
-  if (useCase === "dashboard") {
-    const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS);
+export const useActivePrograms = () => {
+  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS);
 
-    return {
-      error,
-      data,
-      loading,
-    };
-  } else if (useCase === "profile") {
-    const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS_STATS);
+  return {
+    error,
+    data,
+    loading,
+  };
+};
 
-    return {
-      error,
-      data,
-      loading,
-    };
-  }
+export const useProgramsStats = () => {
+  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS_STATS);
+
+  return {
+    error,
+    data,
+    loading,
+  };
 };
