@@ -1,10 +1,20 @@
 export function ActionCard(props) {
   if (props.type === "dashboard") {
+    const { name, dayDue, duration, category } = props;
     return (
-      <div className="flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7">
-        <h3 className="headline-3">Tag 2</h3>
-        <h2 className="headline-2">Titel des Programms</h2>
-        <p className="stext">26 Min. · Beweglichkeit </p>
+      <div className="flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7 mt-4">
+        <h3 className="headline-3">Tag {dayDue}</h3>
+        <h2 className="headline-2">{name}</h2>
+        <p className="stext">
+          {duration} Min. ·{" "}
+          {category === "weightTraining"
+            ? "Kraft"
+            : category === "mobility"
+            ? "Mobilität"
+            : category === "cardio"
+            ? "Cardio"
+            : "Koordination"}
+        </p>
       </div>
     );
   } else if (props.type === "program") {

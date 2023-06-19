@@ -1,26 +1,33 @@
 import { useQuery, gql } from "@apollo/client";
 
+const CORE_PROGRAM_FIELDS = gql`
+  fragment CoreProgramFields on Program {
+    id
+    name
+    color
+    isActive
+  }
+`;
+
 const GET_PROGRAMS = gql`
+  ${CORE_PROGRAM_FIELDS}
   query {
     programs {
-      id
-      name
-      color
+      ...CoreProgramFields
     }
   }
 `;
 
 const GET_PROGRAM = gql`
+  ${CORE_PROGRAM_FIELDS}
   query ProgramByID($id: ID!, $first: Int!, $skip: Int!) {
     program(where: { id: $id }) {
-      id
-      name
+      ...CoreProgramFields
       description
       focus
       difficulty
       durationWeeks
       durationDays
-      color
       programWorkoutSchedule(orderBy: dayDue_ASC, first: $first, skip: $skip) {
         id
         dayDue
@@ -31,6 +38,22 @@ const GET_PROGRAM = gql`
           category
           workoutColor
           duration
+        }
+      }
+    }
+  }
+`;
+
+const GET_ACTIVE_PROGRAMS = gql`
+  ${CORE_PROGRAM_FIELDS}
+  query ActivePrograms {
+    programs(where: { isActive: true }) {
+      ...CoreProgramFields
+      programWorkoutSchedule(where: { completed: false }, first: 1) {
+        dayDue
+        workout {
+          duration
+          category
         }
       }
     }
@@ -58,5 +81,15 @@ export const useProgram = ({ id, first, skip, onCompleted }) => {
     data,
     loading,
     fetchMore,
+  };
+};
+
+export const useActivePrograms = () => {
+  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS);
+
+  return {
+    error,
+    data,
+    loading,
   };
 };
