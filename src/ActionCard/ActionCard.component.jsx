@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 export function ActionCard(props) {
   if (props.type === "dashboard") {
-    const { name, dayDue, duration, category } = props;
+    const { name, dayDue, duration, category, programId, workoutId } = props;
     return (
-      <div className="flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7 mt-4">
+      <Link to={`programs/${programId}/${workoutId}`} className="flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7 mt-4">
         <h3 className="headline-3">Tag {dayDue}</h3>
         <h2 className="headline-2">{name}</h2>
         <p className="stext">
@@ -15,7 +17,7 @@ export function ActionCard(props) {
             ? "Cardio"
             : "Koordination"}
         </p>
-      </div>
+      </Link>
     );
   } else if (props.type === "program") {
     return (

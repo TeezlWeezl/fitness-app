@@ -50,6 +50,7 @@ const GET_ACTIVE_PROGRAMS = gql`
     programs(where: { isActive: true }) {
       ...CoreProgramFields
       programWorkoutSchedule(where: { completed: false }, first: 1) {
+        id
         dayDue
         workout {
           duration

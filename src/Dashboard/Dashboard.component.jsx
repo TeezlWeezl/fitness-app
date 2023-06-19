@@ -27,10 +27,11 @@ export function Dashboard() {
         {programs.map(
           ({
             color,
-            id,
+            id: programId,
             name,
             programWorkoutSchedule: [
               {
+                id: workoutId,
                 dayDue,
                 workout: { duration, category },
               },
@@ -38,14 +39,15 @@ export function Dashboard() {
           }) => {
             return (
               <ActionCard
-                key={id}
+                key={programId}
                 type="dashboard"
                 color={color}
-                id={id}
                 name={name}
                 dayDue={dayDue}
                 duration={duration}
                 category={category}
+                programId={programId}
+                workoutId={workoutId}
               >
                 {name}
               </ActionCard>
