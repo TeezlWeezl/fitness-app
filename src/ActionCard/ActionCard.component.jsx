@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
 
+import "./ActrionCard.style.scss";
+
 export function ActionCard(props) {
+
+  const translateGradientToColor = (gradient) => {
+    if (gradient === "redGradient") return "#FFD162" 
+    else if (gradient === "greenGradient") return "#3EF3E8"
+    else if (gradient === "blueGradient") return "#3A4AE4"
+    else return "blue"
+  }
+
   if (props.type === "dashboard") {
     const { name, dayDue, duration, category, programId, workoutId } = props;
     return (
       <Link
         to={`programs/${programId}/${workoutId}`}
-        className="mt-4 flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7"
+        className="shadow-md shadow-black mt-4 flex min-h-[214px] flex-col justify-end rounded-[30px] bg-app-medium p-7"
       >
         <h3 className="headline-3">Tag {dayDue}</h3>
         <h2 className="headline-2">{name}</h2>
@@ -34,14 +44,35 @@ export function ActionCard(props) {
       </div>
     );
   } else if (props.type === "progress") {
-    const { name, dayDue, duration, category, programId, workoutId, completedWorkouts, totalWorkouts } = props;
+    const {
+      name,
+      dayDue,
+      duration,
+      category,
+      programId,
+      workoutId,
+      completedWorkouts,
+      totalWorkouts,
+      color,
+    } = props;
 
     return (
       <div
-        className={`mt-5 flex min-h-[${props.height}] flex-col items-center justify-center rounded-[30px] bg-app-medium first-of-type:mt-12 ${props.color} ${props.style}`}
+        className={`shadow-md shadow-black mt-4 flex max-h-[120px] min-h-[120px] flex-col items-center justify-center rounded-[30px] bg-app-medium pl-6`}
       >
-        <div className="ml flex min-w-full items-center justify-start gap-8">
-          <div className="min-h-[62px] min-w-[62px] rounded-full bg-green-600"></div>
+        <div className="flex min-w-full items-center justify-start gap-8">
+          <div
+            className="pie"
+            style={{
+              "--percentage": (completedWorkouts / totalWorkouts) * 100,
+              "--borderThickness": 15 + "px",
+              "--mainColor": translateGradientToColor(color),
+            }}
+          >
+            <div className="mtext z-10 text-lg">{`${
+              ((completedWorkouts / totalWorkouts) * 100).toFixed(0)
+            } %`}</div>
+          </div>
           <div className="flex flex-col gap-0">
             <p className="mtext">{name}</p>
             <p className="stext">{`${completedWorkouts} von ${totalWorkouts} geschafft`}</p>

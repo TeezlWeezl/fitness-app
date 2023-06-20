@@ -38,12 +38,11 @@ const UserProfile = () => {
               <ActionCard
                 key={programId}
                 height="120px"
-                color="bg-app-medium"
                 type="progress"
-                style="mt-2 pl-6"
                 name={name}
                 completedWorkouts={completedWorkouts}
                 totalWorkouts={totalWorkouts}
+                color={color}
               ></ActionCard>
             );
           }

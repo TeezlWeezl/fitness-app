@@ -29,29 +29,31 @@ export function Dashboard() {
             color,
             id: programId,
             name,
-            programWorkoutSchedule: [
-              {
+            programWorkoutSchedule,
+          }) => {
+            // add an ActionCard if the array of Workouts in programWorkoutSchedule is not empty
+            if (programWorkoutSchedule[0]) {
+              const {
                 id: workoutId,
                 dayDue,
                 workout: { duration, category },
-              },
-            ],
-          }) => {
-            return (
-              <ActionCard
-                key={programId}
-                type="dashboard"
-                color={color}
-                name={name}
-                dayDue={dayDue}
-                duration={duration}
-                category={category}
-                programId={programId}
-                workoutId={workoutId}
-              >
-                {name}
-              </ActionCard>
-            );
+              } = programWorkoutSchedule[0];
+              return (
+                <ActionCard
+                  key={programId}
+                  type="dashboard"
+                  color={color}
+                  name={name}
+                  dayDue={dayDue}
+                  duration={duration}
+                  category={category}
+                  programId={programId}
+                  workoutId={workoutId}
+                >
+                  {name}
+                </ActionCard>
+              );
+            }
           }
         )}
         <Navbar nav="home" />
