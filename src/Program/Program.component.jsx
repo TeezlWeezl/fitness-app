@@ -5,6 +5,7 @@ import { useProgram } from "../hooks/usePrograms";
 import { useEffect, useState } from "react";
 
 import close from "../icon/close.svg";
+import { useUpdateWorkoutCompleted } from "../hooks/useUpdateWorkoutFinished";
 
 function Program(props) {
   const [offset, setOffset] = useState(0);
@@ -19,6 +20,7 @@ function Program(props) {
   }
   );
   const navigate = useNavigate();
+  // const {updateAndPublishWorkoutCompleted, loading: loadingTest, error: errorTest, data: dataTest} = useUpdateWorkoutCompleted()
 
   if (loading)
     return (
@@ -129,7 +131,14 @@ function Program(props) {
           color={color}
           size="145px"
           onClick={() => {
+            // updateAndPublishWorkoutCompleted({
+            //   programId: "cl27m0xd399qr0cun5o69zb35",
+            //   workoutId: "clh95a1xzz9p40buuox30x6dx",
+            //   completed: false
+            // })
+
             for (const { completed, id } of programWorkoutSchedule) {
+              console.log(id, completed);
               if (!completed) {
                 navigate(id);
                 return
