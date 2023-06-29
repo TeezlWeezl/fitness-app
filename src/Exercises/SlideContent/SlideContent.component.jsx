@@ -215,7 +215,7 @@ const SlideContent = ({
               </div>
               <div className="absolute top-[15%] max-h-[70%] overflow-scroll px-9 text-left">
                 <h1 className="headline-1">{name}</h1>
-                <p className="mtext mt-5">{description}</p>
+                <p className="mtext mt-5 whitespace-pre-wrap">{description}</p>
               </div>
             </div>
             <ActionButton

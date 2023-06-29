@@ -4,11 +4,10 @@ import "./ActrionCard.style.scss";
 
 export function ActionCard(props) {
 
-  const translateGradientToColor = (gradient) => {
-    if (gradient === "redGradient") return "#FFD162" 
-    else if (gradient === "greenGradient") return "#3EF3E8"
-    else if (gradient === "blueGradient") return "#3A4AE4"
-    else return "blue"
+  const gradientColors = {
+    redGradient: "#FFD162" ,
+    greenGradient: "#3EF3E8",
+    blueGradient: "#3A4AE4"
   }
 
   if (props.type === "dashboard") {
@@ -66,7 +65,7 @@ export function ActionCard(props) {
             style={{
               "--percentage": (completedWorkouts / totalWorkouts) * 100,
               "--borderThickness": 15 + "px",
-              "--mainColor": translateGradientToColor(color),
+              "--mainColor": gradientColors[color],
             }}
           >
             <div className="mtext z-10 text-lg">{`${
