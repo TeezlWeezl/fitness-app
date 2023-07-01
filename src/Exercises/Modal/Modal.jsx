@@ -1,8 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useUpdateWorkoutCompleted } from "../../hooks/useUpdateWorkoutFinished";
 
 const Modal = ({ setIsModalOpen, contentType, programId, workoutId }) => {
   const navigate = useNavigate();
+  const { updateAndPublishWorkoutCompleted, loading, data, error } =
+    useUpdateWorkoutCompleted();
 
   const renderContent = (contentType) => {
     if (contentType === "exerciseFinished")
@@ -85,6 +88,11 @@ const Modal = ({ setIsModalOpen, contentType, programId, workoutId }) => {
             <button
               className="stext mtext mt-3 min-w-full rounded-md bg-app-medium p-3"
               onClick={(e) => {
+                updateAndPublishWorkoutCompleted({
+                  programId,
+                  workoutId,
+                  completed: true
+                })
                 navigate(`/programs/${programId}`);
               }}
             >
