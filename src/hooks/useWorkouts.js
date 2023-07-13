@@ -4,6 +4,7 @@ const GET_WORKOUT = gql`
   query WorkoutByID($programId: ID!, $workoutId: ID!) {
     program(where: { id: $programId }) {
       programWorkoutSchedule(where: { id: $workoutId }) {
+        id
         completed
         dayDue
         workout {
@@ -19,6 +20,6 @@ const GET_WORKOUT = gql`
 export const useWorkout = (programId, workoutId) => {
   return useQuery(GET_WORKOUT, {
     variables: { programId, workoutId },
-    fetchPolicy: 'no-cache'
+    fetchPolicy: "cache-first"
   });
 };

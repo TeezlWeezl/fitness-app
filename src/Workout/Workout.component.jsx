@@ -32,6 +32,8 @@ function Workout(props) {
       workout: { name, duration, category },
     } = data.program.programWorkoutSchedule[0];
 
+    // console.log(data);
+
     if (completed) {
       // Update with a not-completed page
       return (<div>Testing</div>);

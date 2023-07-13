@@ -138,7 +138,6 @@ function Program(props) {
             // })
 
             for (const { completed, id } of programWorkoutSchedule) {
-              console.log(id, completed);
               if (!completed) {
                 navigate(id);
                 return
