@@ -6,6 +6,26 @@ import { useEffect, useState } from "react";
 
 import close from "../icon/close.svg";
 import { useUpdateWorkoutCompleted } from "../hooks/useUpdateWorkoutFinished";
+import { PieChart, pieChartDefaultProps } from "react-minimal-pie-chart";
+
+const calculatePieChartObj = (arr) => {
+  const colorCodes = ["#E38627", "#C13C37", "#6A2135", "#5158F6"];
+  let storage = [];
+  arr.forEach((item) => {
+    if (!storage.map((e) => e.title).includes(item)) {
+      storage.push({ title: item, value: 1 });
+    } else {
+      storage.forEach((e) => {
+        if (e.title == item) {
+          e.value += 1;
+          return;
+        }
+      });
+    }
+  });
+  storage.forEach((e, i) => (e.color = colorCodes[i]));
+  return storage;
+};
 
 function Program(props) {
   const [offset, setOffset] = useState(0);
@@ -16,11 +36,16 @@ function Program(props) {
     first: 3,
     onCompleted: () => {
       setOffset((prev) => prev + 3);
-    }
-  }
-  );
+    },
+  });
   const navigate = useNavigate();
   // const {updateAndPublishWorkoutCompleted, loading: loadingTest, error: errorTest, data: dataTest} = useUpdateWorkoutCompleted()
+  const categoryMapping = {
+    weightTraining: "Kraft",
+    mobility: "Mobilität",
+    cardio: "Cardio",
+    coordination: "Koordination",
+  };
 
   if (loading)
     return (
@@ -48,6 +73,12 @@ function Program(props) {
       color,
       programWorkoutSchedule,
     } = data.program;
+
+    const workoutLayout = programWorkoutSchedule.map(
+      (day) => categoryMapping[day.workout.category]
+    );
+
+    console.log(workoutLayout);
 
     return (
       <div className="app-default pb-24 pl-0 pr-0 pt-0">
@@ -92,6 +123,24 @@ function Program(props) {
         </div>
         <div className="my-7 px-6">
           <h3 className="headline-3">So ist das Programm aufgeteilt:</h3>
+          <PieChart
+            data={calculatePieChartObj(workoutLayout)}
+            style={{ height: "250px" }}
+            radius={pieChartDefaultProps.radius - 14}
+            segmentsShift={(index) => (index === 0 ? 7 : 0.5)}
+            label={({ dataEntry }) => {
+              const percentage = Math.round(dataEntry.percentage) + "%";
+              const title = dataEntry.title;
+              return title + '\n' + percentage;
+            }}
+            labelStyle={{
+              fontSize: "8px",
+              fontFamily: "sans-serif",
+              fill: "white",
+            }}
+            lineWidth={60}
+            labelPosition={112}
+          />
         </div>
         <div className="mt-7 flex items-center justify-between px-6">
           <h3 id="workoutSchedule" className="headline-3">
@@ -140,7 +189,7 @@ function Program(props) {
             for (const { completed, id } of programWorkoutSchedule) {
               if (!completed) {
                 navigate(id);
-                return
+                return;
               }
             }
           }}

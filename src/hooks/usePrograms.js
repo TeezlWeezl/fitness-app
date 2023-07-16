@@ -55,7 +55,7 @@ const GET_ACTIVE_PROGRAMS = gql`
 
 const GET_ACTIVE_PROGRAMS_STATS = gql`
   ${CORE_PROGRAM_FIELDS}
-  query {
+  query ActiveProgramsStats {
     programs(where: { isActive: true }) {
       ...CoreProgramFields
       programWorkoutSchedule {
@@ -100,7 +100,10 @@ export const useActivePrograms = () => {
 };
 
 export const useProgramsStats = () => {
-  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS_STATS);
+  const { error, data, loading } = useQuery(GET_ACTIVE_PROGRAMS_STATS,
+    {
+      fetchPolicy: "no-cache"
+    });
 
   return {
     error,

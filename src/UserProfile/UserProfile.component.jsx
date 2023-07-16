@@ -7,9 +7,11 @@ const UserProfile = () => {
 
   if (loading) {
     return <p>Loading...</p>;
+
   }
 
   if (error) {
+    console.log("Error: ", error);
     return <p>Error: {error.message}</p>;
   }
 

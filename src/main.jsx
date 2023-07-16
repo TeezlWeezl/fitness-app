@@ -17,7 +17,7 @@ function mergeArrays(array1, array2) {
 
   array2.forEach((item2) => {
     const index = merged.findIndex(
-      (item1) => item1.__ref.split(':')[1] === item2.__ref.split(':')[1]
+      (item1) => item1.__ref.split(":")[1] === item2.__ref.split(":")[1]
     );
 
     if (index !== -1) {
@@ -34,49 +34,29 @@ function mergeArrays(array1, array2) {
 
 const client = new ApolloClient({
   uri: "https://api-eu-central-1-shared-euc1-02.hygraph.com/v2/clgw946601iky01uig6lia0tz/master",
-  cache: new InMemoryCache(
-    {
+  cache: new InMemoryCache({
     typePolicies: {
       Program: {
         fields: {
           programWorkoutSchedule: {
             keyArgs: (args) => {
-              const newArguments =  Object.keys(args).filter(
+              const newArguments = Object.keys(args).filter(
                 (key) => key !== "first" && key !== "skip"
               );
 
-              console.log("Args: ", args, typeof args ,"New Args: ", newArguments, typeof newArguments);
-
-              return newArguments
+              return newArguments;
             },
-  
+
             // Concatenate the incoming list items with
             // the existing list items.
             merge(existing = [], incoming) {
-              console.log("Existing: ", existing);
-              console.log("Incoming: ", incoming);
-
               return mergeArrays(existing, incoming);
             },
-            // read(pws, args) {
-            //   const programWorkoutScheduleId = args?.args?.where?.id
-            //   console.log(programWorkoutScheduleId);
-            //   if (programWorkoutScheduleId) {
-            //     const test = pws.filter((pw) => {
-            //       console.log(pw);
-            //       return pw.__ref.includes(programWorkoutScheduleId)
-            //     })
-            //     console.log(test);
-            //     return test
-            //   }
-            //   return pws
-            // }
-          }, 
-        }
-      }
-    }
-  }
-  ),
+          },
+        },
+      },
+    },
+  }),
 });
 
 const router = createBrowserRouter([
@@ -100,7 +80,7 @@ const router = createBrowserRouter([
   },
   {
     path: "programs/:programId/:workoutId/exercise",
-    element: <Exercises />
+    element: <Exercises />,
   },
   {
     path: "profile",
